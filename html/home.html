@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="Cache-Control"
+        content="no-cache, no-store, must-revalidate"
+    >
+    <meta
+        http-equiv="Pragma"
+        content="no-cache"
+    >
+    <meta
+        http-equiv="Expires"
+        content="0"
+    >
+
+    <title>الرئيسية | المفقودات والمعثورات</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css?v=20261001-2"
+    >
+    <link
+        rel="stylesheet"
+        href="../css/home.css?v=20261001-4"
+    >
+
+    <meta name="theme-color" content="#183f39">
+    <link rel="stylesheet" href="../css/ui-theme.css?v=20261006-4">
+    <script src="../js/ui-theme.js?v=20261006-3" defer></script>
+</head>
+
+
+<body class="home-page">
+
+    <header class="topbar">
+
+        <div class="topbar-content">
+
+            <a class="site-brand" href="home.html?v=20261006-3"><span class="brand-icon" aria-hidden="true">⌖</span><span><strong>المفقودات والمعثورات</strong><small>ينبع · نوصّل الأمانة لأهلها</small></span></a>
+            <div class="topbar-user">
+
+                <span class="welcome-label">
+                    أهلاً بعودتك
+                </span>
+
+                <h2 id="userWelcomeName">
+                    مستخدم
+                </h2>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+                <button
+                    class="notification-button"
+                    id="notificationButton"
+                    type="button"
+                    aria-label="عرض التنبيهات"
+                >
+
+                    🔔
+
+                    <span
+                        class="notification-count"
+                        id="notificationCount"
+                    >
+                        0
+                    </span>
+
+                </button>
+
+                <button
+                    class="logout-button"
+                    id="logoutButton"
+                    type="button"
+                >
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <path d="M10 17l5-5-5-5"></path>
+                        <path d="M15 12H3"></path>
+                        <path d="M12 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"></path>
+                    </svg>
+                    <span>تسجيل الخروج</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="home-container">
+
+        <section class="home-intro">
+            <div class="hero-copy">
+                <span class="intro-eyebrow">من ينبع، لأهل ينبع</span>
+                <h1>كل غرض له حكاية.<br><em>خلّنا نرجعه لصاحبه.</em></h1>
+                <p>فقدت شيئاً يهمّك أو لقيت غرضاً لأحد؟ بلاغك هو أول خطوة تجمع الغرض بصاحبه من جديد.</p>
+                <div class="hero-caption"><span aria-hidden="true">📍</span>ينبع البحر · ينبع الصناعية</div>
+            </div>
+            <img class="hero-art" src="../assets/reunion.svg" alt="حقيبة وجوال ومفتاح مع علامة موقع، أغراض في طريقها لأصحابها" width="460" height="330">
+        </section>
+        <div class="home-section-heading"><h2>كيف نقدر نساعدك؟</h2><p>اختر نوع البلاغ، والباقي خطوة بخطوة.</p></div>
+
+
+        <section class="main-actions">
+
+
+            <!-- مفقود -->
+
+            <a
+                href="lost-report.html?v=20261006-3"
+                class="action-card lost-card"
+                id="lostButton"
+            >
+
+                <div class="action-card-icon" aria-hidden="true">
+                    🔍
+                </div>
+
+                <div class="action-card-content">
+
+                    <span class="action-question">
+                        فاقد لك شيء؟
+                    </span>
+
+                    <h2>
+                        المفقودات
+                    </h2>
+
+                    <p>
+                        بلغنا عن الشيء الذي فقدته وسنبحث عن أقرب تطابق.
+                    </p>
+
+                    <span class="action-link-label">
+                        ابدأ بلاغك
+                    </span>
+
+                </div>
+
+                <span class="action-arrow" aria-hidden="true">
+                    ←
+                </span>
+
+            </a>
+
+
+            <!-- معثور -->
+
+            <a
+                href="found-report.html?v=20261006-3"
+                class="action-card found-card"
+                id="foundButton"
+            >
+
+                <div class="action-card-icon" aria-hidden="true">
+                    📦
+                </div>
+
+                <div class="action-card-content">
+
+                    <span class="action-question">
+                        لقيت شيء وما عرفت صاحبه؟
+                    </span>
+
+                    <h2>
+                        المعثورات
+                    </h2>
+
+                    <p>
+                        سجل الشيء الذي وجدته وسنحاول الوصول إلى صاحبه.
+                    </p>
+
+                    <span class="action-link-label">
+                        سجّل معثوراً
+                    </span>
+
+                </div>
+
+                <span class="action-arrow" aria-hidden="true">
+                    ←
+                </span>
+
+            </a>
+
+        </section>
+
+
+        <section class="how-it-works" aria-label="كيف تعمل المنصة">
+            <div class="how-step"><span>01</span><div><strong>سجّل بلاغك</strong><p>اختر الفئة وأضف وصفاً ومكاناً للغرض.</p></div></div>
+            <div class="how-step"><span>02</span><div><strong>نبحث عن التطابق</strong><p>نقارن التفاصيل بين المفقودات والمعثورات.</p></div></div>
+            <div class="how-step"><span>03</span><div><strong>نقرّبك من صاحب الغرض</strong><p>تراجع الإدارة التطابق وتتابع خطوات التسليم.</p></div></div>
+        </section>
+        <section class="secondary-actions">
+
+            <button
+                type="button"
+                class="support-button"
+                id="supportButton"
+                aria-haspopup="dialog"
+            >
+
+                <span aria-hidden="true">
+                    💬
+                </span>
+
+                <div>
+
+                    <strong>
+                        الإبلاغ عن مشكلة / اقتراح فكرة
+                    </strong>
+
+                    <small>
+                        ساعدنا في تحسين النظام
+                    </small>
+
+                </div>
+
+            </button>
+
+        </section>
+
+
+        <section class="yanbu-badge">
+
+            <span>
+                📍
+            </span>
+
+            <div>
+
+                <strong>
+                    الخدمة متاحة حالياً في ينبع
+                </strong>
+
+                <small>
+                    ينبع البحر • ينبع الصناعية
+                </small>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- نافذة المشكلة / الاقتراح -->
+
+    <div
+        class="modal-overlay"
+        id="supportModal"
+    >
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="supportModalTitle"
+        >
+
+            <div class="modal-header">
+
+                <div>
+
+                    <h2 id="supportModalTitle">
+                        تواصل معنا
+                    </h2>
+
+                    <p>
+                        مشكلة أو اقتراح؟ اكتب لنا.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeSupportModal"
+                    aria-label="إغلاق نافذة التواصل"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <form id="supportForm">
+
+                <div class="input-group">
+
+                    <label for="supportType">
+                        نوع الرسالة
+                    </label>
+
+                    <select id="supportType">
+
+                        <option value="suggestion">
+                            اقتراح فكرة
+                        </option>
+
+                        <option value="bug">
+                            مشكلة تقنية
+                        </option>
+
+                        <option value="complaint">
+                            شكوى
+                        </option>
+
+                        <option value="other">
+                            أخرى
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="supportSubject">
+                        العنوان
+                    </label>
+
+                    <input
+                        id="supportSubject"
+                        type="text"
+                        placeholder="عنوان مختصر"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="supportMessage">
+                        التفاصيل
+                    </label>
+
+                    <textarea
+                        id="supportMessage"
+                        rows="5"
+                        placeholder="اكتب التفاصيل هنا..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <button
+                    class="primary-button"
+                    type="submit"
+                >
+                    إرسال
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- التنبيهات -->
+
+    <div
+        class="notification-panel"
+        id="notificationPanel"
+        aria-label="التنبيهات"
+    >
+
+        <div class="notification-panel-header">
+
+            <strong>
+                التنبيهات
+            </strong>
+
+            <button
+                id="closeNotifications"
+                type="button"
+                aria-label="إغلاق التنبيهات"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="empty-notifications">
+
+            🔔
+
+            <strong>
+                لا توجد تنبيهات حالياً
+            </strong>
+
+            <span>
+                سنخبرك هنا عند وجود تحديث على بلاغك.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <script src="../js/session.js"></script>
+    <script src="../js/home.js?v=20261006-3"></script>
+</body>
+</html>

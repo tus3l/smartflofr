@@ -1,0 +1,219 @@
+/* =========================================================
+   LOST REPORT OVERRIDES
+   ========================================================= */
+
+.lost-status {
+    border-color: #d7e1e6;
+
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.lost-report-icon {
+    border-color: #d7e1e6;
+
+    background: var(--info-soft);
+}
+
+.lost-progress {
+    background: var(--info);
+}
+
+.lost-step-number {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+
+/* =========================================================
+   SELECTED STATES
+   ========================================================= */
+
+.lost-report-page .category-card.selected {
+    border-color: #91a8b4;
+
+    background: var(--info-soft);
+    color: var(--info);
+
+    box-shadow:
+        inset 0 0 0 1px #91a8b4;
+}
+
+.lost-report-page .selection-status.selected {
+    border-color: #d7e1e6;
+
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.lost-report-page .color-option.selected {
+    border-color: #91a8b4;
+
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.lost-report-page .photo-option.selected {
+    border-color: #91a8b4;
+
+    background: var(--info-soft);
+}
+
+.lost-report-page .location-choice.selected {
+    border-color: #91a8b4;
+
+    background: var(--info-soft);
+}
+
+
+/* =========================================================
+   LOST BUTTONS
+   ========================================================= */
+
+.lost-gps-button,
+.lost-next-button,
+.lost-submit {
+    border-color: var(--info);
+
+    background: var(--info);
+}
+
+.lost-gps-button:hover,
+.lost-next-button:hover,
+.lost-submit:hover {
+    background: #274d63;
+}
+
+
+/* =========================================================
+   PRIVATE DATA
+   ========================================================= */
+
+.private-data-note {
+    margin: 7px 0 0;
+
+    padding: 9px 10px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: #f8fafb;
+    color: var(--muted);
+
+    line-height: 1.55;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   GPS LOADING
+   ========================================================= */
+
+.gps-loading {
+    display: none;
+
+    margin-top: 12px;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.gps-loading.show {
+    display: flex;
+}
+
+.gps-spinner {
+    width: 16px;
+    height: 16px;
+
+    flex-shrink: 0;
+
+    border: 2px solid #dfe4ea;
+    border-top-color: var(--info);
+    border-radius: 50%;
+
+    animation:
+        gpsSpin
+        0.65s
+        linear
+        infinite;
+}
+
+@keyframes gpsSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   GPS QUALITY
+   ========================================================= */
+
+.accuracy-quality {
+    display: none;
+
+    margin-top: 10px;
+
+    padding: 9px 10px;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    line-height: 1.5;
+    font-size: 10px;
+}
+
+.accuracy-quality.show {
+    display: block;
+}
+
+.accuracy-quality.excellent {
+    border-color: #cfeadd;
+
+    background: var(--success-soft);
+    color: #16694f;
+}
+
+.accuracy-quality.good {
+    border-color: #d5e5f4;
+
+    background: #f0f7fc;
+    color: #35647e;
+}
+
+.accuracy-quality.medium {
+    border-color: #f0dfb8;
+
+    background: var(--warning-soft);
+    color: #8c641c;
+}
+
+.accuracy-quality.weak {
+    border-color: #ffd1d5;
+
+    background: var(--danger-soft);
+    color: #a7353f;
+}
+
+
+/* =========================================================
+   ADMIN INFO
+   ========================================================= */
+
+.lost-admin-info {
+    border-color: #d7e1e6;
+
+    background: #f1f5f6;
+}
+
+.lost-admin-info p {
+    color: #536b78;
+}

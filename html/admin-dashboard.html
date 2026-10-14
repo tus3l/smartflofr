@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>لوحة الإدارة | المفقودات والمعثورات</title>
+
+    <link rel="stylesheet" href="../css/main.css?v=20261001-2">
+    <link rel="stylesheet" href="../css/admin-dashboard.css?v=20261001-2">
+    <meta name="theme-color" content="#183f39">
+    <link rel="stylesheet" href="../css/ui-theme.css?v=20261006-4">
+    <script src="../js/ui-theme.js?v=20261006-3" defer></script>
+</head>
+
+
+<body class="admin-page">
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside
+    class="admin-sidebar"
+    id="adminSidebar"
+>
+
+    <div class="admin-brand">
+
+        <div class="admin-brand-icon">
+            ⌖
+        </div>
+
+        <div>
+            <strong>
+                الإدارة
+            </strong>
+
+            <span>
+                المفقودات والمعثورات
+            </span>
+        </div>
+
+    </div>
+
+
+    <nav class="admin-nav" aria-label="قائمة الإدارة">
+        <span class="nav-heading">إدارة البلاغات</span>
+
+        <button
+            type="button"
+            class="admin-nav-item active"
+            data-section="dashboard"
+        >
+            <span>📊</span>
+            الرئيسية
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-type="all"
+        >
+            <span>📋</span>
+            كل البلاغات
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-type="lost"
+        >
+            <span>🔍</span>
+            المفقودات
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-type="found"
+        >
+            <span>📦</span>
+            المعثورات
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-status="strong-match"
+        >
+            <span>🧠</span>
+            تطابقات قوية
+
+            <span
+                class="nav-count"
+                id="strongMatchNavCount"
+            >
+                0
+            </span>
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-status="new"
+        >
+            <span>🆕</span>
+            بلاغات جديدة
+
+            <span
+                class="nav-count"
+                id="newReportsNavCount"
+            >
+                0
+            </span>
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-status="contact"
+        >
+            <span>📞</span>
+            بانتظار التواصل
+        </button>
+
+
+        <button
+            type="button"
+            class="admin-nav-item"
+            data-filter-status="completed"
+        >
+            <span>✅</span>
+            تم التسليم
+        </button>
+
+    </nav>
+
+
+    <div class="sidebar-footer">
+
+        <div class="admin-profile">
+
+            <div class="admin-avatar">
+                A
+            </div>
+
+            <div>
+                <strong>
+                    مدير النظام
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="admin-main">
+
+
+    <!-- HEADER -->
+
+    <header class="admin-header">
+
+        <button
+            type="button"
+            class="sidebar-toggle"
+            id="sidebarToggle" aria-label="فتح قائمة الإدارة"
+        >
+            ☰
+        </button>
+
+
+        <div class="admin-header-title">
+
+            <span>
+                لوحة التحكم
+            </span>
+
+            <h1>
+                متابعة البلاغات
+            </h1>
+
+        </div>
+
+
+        <div class="admin-header-actions">
+
+            <button
+                type="button"
+                class="header-action-button"
+                id="refreshButton"
+                title="تحديث"
+            >
+                ↻
+            </button>
+
+
+            <button
+                type="button"
+                class="header-action-button notification-admin-button" aria-label="التنبيهات"
+            >
+                🔔
+
+                <span>
+                    3
+                </span>
+            </button>
+
+        </div>
+
+    </header>
+
+
+
+    <main class="admin-content">
+
+
+        <!-- =========================
+             STATISTICS
+        ========================= -->
+
+        <section class="stats-grid">
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon lost-stat-icon">
+                    🔍
+                </div>
+
+                <div>
+
+                    <span>
+                        المفقودات
+                    </span>
+
+                    <strong id="lostCount">
+                        0
+                    </strong>
+
+                    <small>
+                        إجمالي بلاغات الفاقد
+                    </small>
+
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon found-stat-icon">
+                    📦
+                </div>
+
+                <div>
+
+                    <span>
+                        المعثورات
+                    </span>
+
+                    <strong id="foundCount">
+                        0
+                    </strong>
+
+                    <small>
+                        إجمالي بلاغات العاثر
+                    </small>
+
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon smart-stat-icon">
+                    🧠
+                </div>
+
+                <div>
+
+                    <span>
+                        تطابق قوي
+                    </span>
+
+                    <strong id="strongMatchCount">
+                        0
+                    </strong>
+
+                    <small>
+                        تطابق 85% أو أكثر
+                    </small>
+
+                </div>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-icon completed-stat-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        تم التسليم
+                    </span>
+
+                    <strong id="completedCount">
+                        0
+                    </strong>
+
+                    <small>
+                        حالات تم إغلاقها بنجاح
+                    </small>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             TOP MATCHES
+        ========================= -->
+
+        <section class="dashboard-section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        ذكاء النظام
+                    </span>
+
+                    <h2>
+                        أقوى التطابقات
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="simple-button"
+                    id="showStrongMatchesButton"
+                >
+                    عرض الكل
+                </button>
+
+            </div>
+
+
+            <div
+                class="top-matches-grid"
+                id="topMatchesGrid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =========================
+             REPORTS
+        ========================= -->
+
+        <section class="dashboard-section reports-section">
+
+
+            <div class="reports-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        إدارة البلاغات
+                    </span>
+
+                    <h2>
+                        البلاغات
+                    </h2>
+
+                </div>
+
+
+                <div class="reports-tools">
+
+
+                    <div class="search-box">
+
+                        <span>
+                            🔎
+                        </span>
+
+                        <input
+                            type="search"
+                            id="reportsSearch"
+                            placeholder="ابحث بالاسم، الجوال، القسم، الماركة..."
+                        >
+
+                    </div>
+
+
+                    <select
+                        id="reportTypeFilter"
+                        class="admin-select"
+                    >
+
+                        <option value="all">
+                            جميع البلاغات
+                        </option>
+
+                        <option value="lost">
+                            فاقد
+                        </option>
+
+                        <option value="found">
+                            عاثر
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="reportStatusFilter"
+                        class="admin-select"
+                    >
+
+                        <option value="all">
+                            جميع الحالات
+                        </option>
+
+                        <option value="new">
+                            جديد
+                        </option>
+
+                        <option value="review">
+                            قيد المراجعة
+                        </option>
+
+                        <option value="strong-match">
+                            تطابق قوي
+                        </option>
+
+                        <option value="contact">
+                            بانتظار التواصل
+                        </option>
+
+                        <option value="verification">
+                            جاري التحقق
+                        </option>
+
+                        <option value="completed">
+                            تم التسليم
+                        </option>
+
+                    </select>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DESKTOP TABLE -->
+
+            <div class="reports-table-wrapper">
+
+                <table class="reports-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            #
+                        </th>
+
+                        <th>
+                            نوع البلاغ
+                        </th>
+
+                        <th>
+                            صاحب البلاغ
+                        </th>
+
+                        <th>
+                            القسم
+                        </th>
+
+                        <th>
+                            النوع
+                        </th>
+
+                        <th>
+                            الماركة / النوع
+                        </th>
+
+                        <th>
+                            المنطقة
+                        </th>
+
+                        <th>
+                            أقوى تطابق
+                        </th>
+
+                        <th>
+                            الحالة
+                        </th>
+
+                        <th>
+                            التاريخ
+                        </th>
+
+                        <th></th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="reportsTableBody"
+                    ></tbody>
+
+                </table>
+
+
+                <div
+                    class="empty-table"
+                    id="emptyReports"
+                >
+                    لا توجد بلاغات تطابق البحث.
+                </div>
+
+            </div>
+
+
+            <!-- MOBILE -->
+
+            <div
+                class="mobile-report-list"
+                id="mobileReportList"
+            ></div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- ======================================================
+     REPORT DETAILS DRAWER
+====================================================== -->
+
+<div
+    class="admin-overlay"
+    id="reportOverlay"
+></div>
+
+
+<aside
+    class="report-details-panel"
+    id="reportDetailsPanel"
+>
+
+    <div class="details-header">
+
+        <div>
+
+            <span id="detailsReportId">
+                بلاغ
+            </span>
+
+            <h2 id="detailsTitle">
+                تفاصيل البلاغ
+            </h2>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="closeReportDetails"
+            class="details-close"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div
+        class="details-body"
+        id="detailsBody"
+    ></div>
+
+</aside>
+
+
+
+<!-- TOAST -->
+
+<div
+    class="admin-toast"
+    id="adminToast"
+></div>
+
+
+<script src="../js/admin-dashboard.js"></script>
+
+</body>
+</html>

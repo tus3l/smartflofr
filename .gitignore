@@ -1,0 +1,5 @@
+uploads/items/*
+!uploads/items/.gitkeep
+.vscode/
+.DS_Store
+Thumbs.db

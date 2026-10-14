@@ -1,0 +1,421 @@
+.lost-report-page {
+    background: #f4f6f8;
+}
+
+.lost-report-page .report-topbar {
+    background: #fff;
+    backdrop-filter: none;
+}
+
+.lost-report-page .report-container {
+    max-width: 900px;
+}
+
+.lost-report-page .report-icon {
+    border-color: #e0e6f2;
+    border-radius: 12px;
+    background: #eef2fa;
+    box-shadow: none;
+}
+
+.lost-report-page .progress-card,
+.lost-report-page .form-step {
+    border-color: #e1e6ec;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(20, 35, 50, 0.035);
+}
+
+.lost-report-page .step-heading {
+    margin-bottom: 19px;
+}
+
+.lost-report-page .step-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+}
+
+.lost-report-page .category-finder {
+    position: relative;
+    z-index: 5;
+    margin: 0;
+    padding: 0;
+}
+
+.lost-report-page .category-finder > label {
+    display: block;
+    margin-bottom: 7px;
+    color: #344154;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.lost-report-page .category-search-field {
+    min-height: 48px;
+    padding-inline: 12px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid #d5dce5;
+    border-radius: 9px;
+    background: #fff;
+    transition:
+        border-color 160ms ease,
+        box-shadow 160ms ease;
+}
+
+.lost-report-page .category-search-field:focus-within {
+    border-color: #718bd0;
+    box-shadow: 0 0 0 3px rgba(49, 95, 202, 0.09);
+}
+
+.lost-report-page .category-search-field > svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    stroke: #687789;
+    stroke-width: 1.8;
+}
+
+.lost-report-page .category-search-field input {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 8px 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+}
+
+.lost-report-page .category-search-field input::placeholder {
+    color: #929dab;
+}
+
+.lost-report-page .category-search-hints {
+    margin-top: 9px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.lost-report-page .category-search-hints > span {
+    margin-inline-end: 2px;
+    color: #737f8f;
+    font-size: 10px;
+}
+
+.lost-report-page .category-search-hints button {
+    min-height: 25px;
+    padding: 3px 8px;
+    border: 1px solid #e0e5eb;
+    border-radius: 6px;
+    background: #fff;
+    color: #526174;
+    font-size: 10px;
+    cursor: pointer;
+    transition:
+        border-color 140ms ease,
+        background 140ms ease,
+        color 140ms ease;
+}
+
+.lost-report-page .category-search-hints button:hover {
+    border-color: #bdcbd1;
+    background: #f3f6f7;
+    color: #315b73;
+}
+
+.lost-report-page .category-search-results {
+    position: absolute;
+    top: calc(100% - 5px);
+    right: 0;
+    left: 0;
+    z-index: 10;
+    max-height: 280px;
+    overflow: auto;
+    padding: 6px;
+    border: 1px solid #dce2e9;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(24, 38, 55, 0.12);
+}
+
+.lost-report-page .category-search-results[hidden] {
+    display: none;
+}
+
+.lost-report-page .category-search-result {
+    width: 100%;
+    min-height: 54px;
+    padding: 7px 9px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--text);
+    text-align: right;
+    cursor: pointer;
+}
+
+.lost-report-page .category-search-result + .category-search-result {
+    border-top: 1px solid #f0f2f5;
+}
+
+.lost-report-page .category-search-result:hover,
+.lost-report-page .category-search-result:focus-visible {
+    outline: 0;
+    background: #f5f7fb;
+}
+
+.lost-report-page .category-search-result-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #f0f3f7;
+    font-size: 18px;
+}
+
+.lost-report-page .category-search-result-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.lost-report-page .category-search-result-copy strong,
+.lost-report-page .category-search-result-copy small {
+    display: block;
+}
+
+.lost-report-page .category-search-result-copy strong {
+    font-size: 12px;
+}
+
+.lost-report-page .category-search-result-copy small {
+    margin-top: 2px;
+    color: #8490a0;
+    font-size: 10px;
+}
+
+.lost-report-page .category-search-result-action {
+    color: #315b73;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.lost-report-page .category-search-empty {
+    margin: 0;
+    padding: 14px 11px;
+    color: #788495;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.lost-report-page .category-browse-divider {
+    margin: 20px 0 11px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #697688;
+    font-size: 11px;
+}
+
+.lost-report-page .category-browse-divider::before,
+.lost-report-page .category-browse-divider::after {
+    height: 1px;
+    flex: 1;
+    background: #e7ebef;
+    content: "";
+}
+
+.lost-report-page .category-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.lost-report-page .category-card {
+    min-height: 76px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    justify-items: stretch;
+    align-content: center;
+    column-gap: 10px;
+    row-gap: 2px;
+    border-color: #e1e6ec;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: none;
+    text-align: right;
+    transition: border-color 140ms ease, background 140ms ease;
+}
+
+.lost-report-page .category-card > span {
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: #f0f3f7;
+    font-size: 18px;
+}
+
+.lost-report-page .category-card strong,
+.lost-report-page .category-card small {
+    grid-column: 2;
+    text-align: right;
+}
+
+.lost-report-page .category-card strong {
+    color: #263346;
+    font-size: 11px;
+}
+
+.lost-report-page .category-card small {
+    color: #788495;
+    font-size: 9px;
+}
+
+.lost-report-page .category-card:hover {
+    transform: none;
+    border-color: #bec9da;
+    background: #fcfcfd;
+    box-shadow: none;
+}
+
+.lost-report-page .category-card:focus-visible {
+    outline: 3px solid rgba(49, 95, 202, 0.16);
+    outline-offset: 2px;
+}
+
+.lost-report-page .category-card.selected {
+    border-color: #91a8b4;
+    background: #edf2f5;
+    color: #315b73;
+    box-shadow: inset 0 0 0 1px #91a8b4;
+}
+
+.lost-report-page .category-card.selected strong {
+    color: #315b73;
+}
+
+.lost-report-page .category-card.selected small {
+    color: #6076ac;
+}
+
+.lost-report-page .category-card.selected > span {
+    background: #e8edf9;
+}
+
+.lost-report-page .selection-status {
+    margin-top: 12px;
+    padding: 8px 10px;
+    border-color: #e4e8ed;
+    border-radius: 7px;
+    background: #f7f8fa;
+    font-size: 10px;
+}
+
+.lost-report-page .selection-status.selected {
+    border-color: #d9e1f2;
+    background: #f2f5fb;
+    color: #38588f;
+}
+
+.lost-report-page .step-navigation button {
+    border-radius: 9px;
+}
+
+@media (max-width: 720px) {
+    .lost-report-page .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .lost-report-page .category-card {
+        min-height: 70px;
+        padding: 8px 9px;
+        border-radius: 8px;
+    }
+
+    .lost-report-page .category-card > span {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.lost-report-page {
+    background: #f3f6f7;
+}
+
+.lost-report-page .report-icon {
+    border-color: #dce4e7;
+    background: #eaf0f3;
+}
+
+.lost-report-page .step-number {
+    background: #eaf0f3;
+    color: #315b73;
+}
+
+.lost-report-page .lost-status {
+    border-color: #dce5e9;
+    background: #edf2f5;
+    color: #315b73;
+}
+
+.lost-report-page .lost-progress {
+    background: #315b73;
+}
+
+.lost-report-page .progress-header {
+    color: #78643b;
+}
+
+.lost-report-page .category-search-field:focus-within {
+    border-color: #718b9a;
+    box-shadow: 0 0 0 3px rgba(49, 91, 115, 0.1);
+}
+
+.lost-report-page .category-search-result-action {
+    color: #315b73;
+}
+
+.lost-report-page .category-card.selected {
+    border-color: #91a8b4;
+    background: #edf2f5;
+    color: #294e63;
+    box-shadow: inset 0 0 0 1px #91a8b4;
+}
+
+.lost-report-page .category-card.selected strong {
+    color: #294e63;
+}
+
+.lost-report-page .category-card.selected small {
+    color: #597284;
+}
+
+.lost-report-page .selection-status.selected {
+    border-color: #d7e1e6;
+    background: #edf2f5;
+    color: #315b73;
+}
+
+.lost-report-page .lost-next-button:hover,
+.lost-report-page .lost-submit:hover,
+.lost-report-page .lost-gps-button:hover {
+    background: #274d63;
+}

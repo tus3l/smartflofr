@@ -1,0 +1,804 @@
+.found-report-page {
+    background:
+        radial-gradient(ellipse at 50% 0, rgba(223, 243, 236, 0.6), transparent 36rem),
+        linear-gradient(180deg, #f8fbfa 0%, #f4f7f6 100%);
+}
+
+.found-report-page .report-topbar {
+    background: rgba(255, 255, 255, 0.86);
+    border-bottom-color: rgba(210, 224, 218, 0.8);
+}
+
+.found-report-page .report-container {
+    max-width: 960px;
+    padding-top: clamp(30px, 5vw, 48px);
+}
+
+.found-report-page .report-icon {
+    border-color: #d5ebe2;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #e9f7f0, #dff1e8);
+}
+
+.found-report-page .report-intro h1 {
+    letter-spacing: -0.7px;
+}
+
+.found-report-page .progress-card {
+    margin-top: 25px;
+    padding: 15px 18px;
+    border-color: #e1e9e5;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(26, 54, 43, 0.035);
+}
+
+.found-report-page .progress-track {
+    height: 6px;
+    background: #eaf0ed;
+}
+
+.found-report-page .progress-fill {
+    background: var(--success);
+}
+
+.found-report-page .form-step {
+    margin-top: 15px;
+    padding: clamp(21px, 4vw, 34px);
+    border-color: #e1e9e5;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(26, 54, 43, 0.04);
+}
+
+.found-report-page .step-heading {
+    margin-bottom: 22px;
+}
+
+.found-report-page .step-number {
+    border-radius: 13px;
+    background: #e8f5ef;
+}
+
+.found-report-page .category-finder {
+    position: relative;
+    z-index: 5;
+    margin: -2px 0 20px;
+    padding: 17px;
+    border: 1px solid #dce9e2;
+    border-radius: 17px;
+    background:
+        radial-gradient(circle at 100% 0, rgba(220, 242, 230, 0.6), transparent 17rem),
+        #f8fbf9;
+}
+
+.found-report-page .category-finder > label {
+    display: block;
+    margin-bottom: 10px;
+    color: #36594a;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.found-report-page .category-search-field {
+    min-height: 52px;
+    padding: 0 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #d4e1da;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(30, 70, 50, 0.04);
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.found-report-page .category-search-field:focus-within {
+    border-color: #70b497;
+    box-shadow: 0 0 0 4px rgba(22, 131, 95, 0.09);
+}
+
+.found-report-page .category-search-field > span {
+    color: var(--success);
+    font-size: 25px;
+    line-height: 1;
+}
+
+.found-report-page .category-search-field input {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 8px 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+}
+
+.found-report-page .category-search-field input::placeholder {
+    color: #9aa8a0;
+}
+
+.found-report-page .category-search-field kbd {
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    border: 1px solid #e5ece8;
+    border-radius: 7px;
+    background: #f8faf9;
+    color: #84938a;
+    font-family: inherit;
+    font-size: 9px;
+}
+
+.found-report-page .category-search-hints {
+    margin-top: 11px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.found-report-page .category-search-hints > span {
+    margin-inline-end: 2px;
+    color: #85938b;
+    font-size: 10px;
+}
+
+.found-report-page .category-search-hints button {
+    min-height: 27px;
+    padding: 3px 9px;
+    border: 1px solid #e0e9e4;
+    border-radius: 999px;
+    background: #fff;
+    color: #526a5d;
+    font-size: 10px;
+    cursor: pointer;
+    transition:
+        border-color var(--transition),
+        background var(--transition),
+        color var(--transition);
+}
+
+.found-report-page .category-search-hints button:hover {
+    border-color: #a8cdb9;
+    background: #eef7f1;
+    color: #14694f;
+}
+
+.found-report-page .category-search-results {
+    position: absolute;
+    top: calc(100% - 12px);
+    right: 17px;
+    left: 17px;
+    z-index: 10;
+    max-height: 280px;
+    overflow: auto;
+    padding: 6px;
+    border: 1px solid #dce7e1;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(24, 50, 38, 0.15);
+}
+
+.found-report-page .category-search-results[hidden] {
+    display: none;
+}
+
+.found-report-page .category-search-result {
+    width: 100%;
+    min-height: 54px;
+    padding: 7px 9px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 0;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--text);
+    text-align: right;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.found-report-page .category-search-result + .category-search-result {
+    border-top: 1px solid #f0f3f1;
+}
+
+.found-report-page .category-search-result:hover,
+.found-report-page .category-search-result:focus-visible {
+    outline: 0;
+    background: #f1f8f4;
+}
+
+.found-report-page .category-search-result-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #f0f6f2;
+    font-size: 18px;
+}
+
+.found-report-page .category-search-result-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.found-report-page .category-search-result-copy strong,
+.found-report-page .category-search-result-copy small {
+    display: block;
+}
+
+.found-report-page .category-search-result-copy strong {
+    font-size: 12px;
+}
+
+.found-report-page .category-search-result-copy small {
+    margin-top: 2px;
+    color: #84918a;
+    font-size: 10px;
+}
+
+.found-report-page .category-search-result-action {
+    color: var(--success);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.found-report-page .category-search-empty {
+    margin: 0;
+    padding: 14px 11px;
+    color: #78877e;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.found-report-page .category-browse-divider {
+    margin: 19px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #94a098;
+    font-size: 10px;
+}
+
+.found-report-page .category-browse-divider::before,
+.found-report-page .category-browse-divider::after {
+    height: 1px;
+    flex: 1;
+    background: #e9eeeb;
+    content: "";
+}
+
+.found-report-page .category-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.found-report-page .category-card {
+    position: relative;
+    min-height: 136px;
+    padding: 18px 12px 16px;
+    gap: 6px;
+    overflow: hidden;
+    border-color: #e3eae7;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #fff, #fcfdfc);
+    box-shadow: 0 2px 7px rgba(25, 50, 40, 0.025);
+}
+
+.found-report-page .category-card::before {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: transparent;
+    content: "";
+    transition: background var(--transition);
+}
+
+.found-report-page .category-card > span {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 3px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #e8efec;
+    border-radius: 13px;
+    background: #f5f8f6;
+    font-size: 21px;
+    transition:
+        transform var(--transition),
+        background var(--transition);
+}
+
+.found-report-page .category-card strong {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.found-report-page .category-card small {
+    color: #87938d;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+.found-report-page .category-card:hover {
+    transform: translateY(-3px);
+    border-color: #c8ddd3;
+    background: #fff;
+    box-shadow: 0 9px 20px rgba(29, 76, 56, 0.08);
+}
+
+.found-report-page .category-card:hover > span {
+    transform: translateY(-1px);
+    background: #edf7f1;
+}
+
+.found-report-page .category-card:focus-visible {
+    outline: 3px solid rgba(22, 131, 95, 0.2);
+    outline-offset: 3px;
+}
+
+.found-report-page .category-card.selected {
+    border-color: #68b99b;
+    background: linear-gradient(160deg, #f4fbf7, #eef8f3);
+    color: #14694f;
+    box-shadow: inset 0 0 0 1px #68b99b, 0 7px 16px rgba(22, 131, 95, 0.08);
+}
+
+.found-report-page .category-card.selected::before {
+    background: var(--success);
+}
+
+.found-report-page .category-card.selected > span {
+    border-color: #d8eee3;
+    background: #e5f4ec;
+}
+
+.found-report-page .category-card.selected small {
+    color: #54806d;
+}
+
+.found-report-page .selection-status {
+    margin-top: 16px;
+    padding: 12px 14px;
+    border-color: #e3eae7;
+    border-radius: 12px;
+    font-size: 11px;
+}
+
+.found-report-page .selection-status.selected {
+    border-color: #cce6d9;
+    background: #f0f8f3;
+}
+
+.found-report-page .step-navigation {
+    margin-top: 14px;
+}
+
+.found-report-page .step-navigation button {
+    min-height: 46px;
+    border-radius: 12px;
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+}
+
+.found-report-page .next-button:hover,
+.found-report-page .submit-report-button:hover {
+    background: #126f51;
+    box-shadow: 0 7px 16px rgba(22, 131, 95, 0.17);
+}
+
+.found-report-page .next-button:active,
+.found-report-page .secondary-button:active {
+    transform: translateY(1px);
+}
+
+@media (max-width: 720px) {
+    .found-report-page .category-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .found-report-page .report-container {
+        padding-top: 26px;
+    }
+
+    .found-report-page .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+    }
+
+    .found-report-page .category-finder {
+        padding: 13px;
+        border-radius: 14px;
+    }
+
+    .found-report-page .category-search-field {
+        gap: 7px;
+        padding-inline: 10px;
+    }
+
+    .found-report-page .category-search-field input {
+        font-size: 12px;
+    }
+
+    .found-report-page .category-search-field kbd {
+        display: none;
+    }
+
+    .found-report-page .category-search-results {
+        right: 13px;
+        left: 13px;
+    }
+
+    .found-report-page .category-card {
+        min-height: 126px;
+        padding: 14px 8px 12px;
+        border-radius: 14px;
+    }
+
+    .found-report-page .category-card small {
+        font-size: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .found-report-page .category-card,
+    .found-report-page .category-card > span,
+    .found-report-page .step-navigation button {
+        transition: none;
+    }
+}
+
+/* Keep the reporting flow calm and familiar rather than decorative. */
+.found-report-page {
+    background: #f4f6f5;
+}
+
+.found-report-page .report-topbar {
+    background: #fff;
+    backdrop-filter: none;
+}
+
+.found-report-page .report-container {
+    max-width: 900px;
+}
+
+.found-report-page .report-icon {
+    border-color: #e0e7e3;
+    border-radius: 12px;
+    background: #edf3ef;
+    box-shadow: none;
+}
+
+.found-report-page .progress-card,
+.found-report-page .form-step {
+    border-color: #e1e6e3;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(20, 35, 28, 0.035);
+}
+
+.found-report-page .step-heading {
+    margin-bottom: 19px;
+}
+
+.found-report-page .step-number {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eaf2ed;
+}
+
+.found-report-page .category-finder {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+
+.found-report-page .category-finder > label {
+    margin-bottom: 7px;
+    color: #34433a;
+    font-size: 12px;
+}
+
+.found-report-page .category-search-field {
+    min-height: 48px;
+    padding-inline: 12px;
+    gap: 9px;
+    border-color: #d5ddd8;
+    border-radius: 9px;
+    box-shadow: none;
+}
+
+.found-report-page .category-search-field:focus-within {
+    border-color: #398367;
+    box-shadow: 0 0 0 3px rgba(22, 131, 95, 0.09);
+}
+
+.found-report-page .category-search-field > svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    stroke: #65746b;
+    stroke-width: 1.8;
+}
+
+.found-report-page .category-search-field input {
+    min-height: 46px;
+    font-size: 13px;
+}
+
+.found-report-page .category-search-field input::placeholder {
+    color: #929d96;
+}
+
+.found-report-page .category-search-hints {
+    margin-top: 9px;
+    gap: 5px;
+}
+
+.found-report-page .category-search-hints > span {
+    color: #737f78;
+    font-size: 10px;
+}
+
+.found-report-page .category-search-hints button {
+    min-height: 25px;
+    border-color: #e0e5e2;
+    border-radius: 6px;
+    background: #fff;
+    color: #526057;
+    font-size: 10px;
+}
+
+.found-report-page .category-search-hints button:hover {
+    border-color: #a9beb2;
+    background: #f5f8f6;
+    color: #315c47;
+}
+
+.found-report-page .category-search-results {
+    top: calc(100% - 5px);
+    right: 0;
+    left: 0;
+    border-color: #dce2de;
+    border-radius: 9px;
+    box-shadow: 0 8px 20px rgba(24, 38, 30, 0.12);
+}
+
+.found-report-page .category-search-result {
+    border-radius: 6px;
+}
+
+.found-report-page .category-search-result-icon {
+    border-radius: 8px;
+    background: #f0f3f1;
+}
+
+.found-report-page .category-search-result:hover,
+.found-report-page .category-search-result:focus-visible {
+    background: #f4f7f5;
+}
+
+.found-report-page .category-search-result-action {
+    color: #376e53;
+}
+
+.found-report-page .category-browse-divider {
+    margin: 20px 0 11px;
+    color: #69766e;
+    font-size: 11px;
+}
+
+.found-report-page .category-browse-divider::before,
+.found-report-page .category-browse-divider::after {
+    background: #e7ebe8;
+}
+
+.found-report-page .category-grid {
+    gap: 8px;
+}
+
+.found-report-page .category-card {
+    min-height: 76px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    justify-items: stretch;
+    align-content: center;
+    column-gap: 10px;
+    row-gap: 2px;
+    border-color: #e1e6e3;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: none;
+    text-align: right;
+    transition: border-color 140ms ease, background 140ms ease;
+}
+
+.found-report-page .category-card::before {
+    display: none;
+}
+
+.found-report-page .category-card > span {
+    width: 34px;
+    height: 34px;
+    margin: 0;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    border: 0;
+    border-radius: 8px;
+    background: #f2f4f3;
+    font-size: 18px;
+}
+
+.found-report-page .category-card strong,
+.found-report-page .category-card small {
+    grid-column: 2;
+    text-align: right;
+}
+
+.found-report-page .category-card strong {
+    color: #26342c;
+    font-size: 11px;
+}
+
+.found-report-page .category-card small {
+    color: #78847c;
+    font-size: 9px;
+}
+
+.found-report-page .category-card:hover {
+    transform: none;
+    border-color: #b9c9c0;
+    background: #fcfdfc;
+    box-shadow: none;
+}
+
+.found-report-page .category-card:hover > span {
+    transform: none;
+    background: #edf1ee;
+}
+
+.found-report-page .category-card.selected {
+    border-color: #438768;
+    background: #f2f7f3;
+    color: #285b40;
+    box-shadow: inset 0 0 0 1px #438768;
+}
+
+.found-report-page .category-card.selected > span {
+    background: #e4eee7;
+}
+
+.found-report-page .category-card.selected strong {
+    color: #285b40;
+}
+
+.found-report-page .category-card.selected small {
+    color: #5c7465;
+}
+
+.found-report-page .selection-status {
+    margin-top: 12px;
+    padding: 8px 10px;
+    border-color: #e4e9e6;
+    border-radius: 7px;
+    background: #f7f8f7;
+    font-size: 10px;
+}
+
+.found-report-page .selection-status.selected {
+    border-color: #d5e4da;
+    background: #f1f6f2;
+    color: #355f45;
+}
+
+.found-report-page .step-navigation button {
+    border-radius: 9px;
+}
+
+.found-report-page .next-button:hover,
+.found-report-page .submit-report-button:hover {
+    background: #146b4e;
+    box-shadow: none;
+}
+
+@media (max-width: 720px) {
+    .found-report-page .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .found-report-page .category-finder {
+        padding: 0;
+    }
+
+    .found-report-page .category-search-results {
+        right: 0;
+        left: 0;
+    }
+
+    .found-report-page .category-card {
+        min-height: 70px;
+        padding: 8px 9px;
+        border-radius: 8px;
+    }
+
+    .found-report-page .category-card > span {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.found-report-page {
+    background: #f3f6f7;
+}
+
+.found-report-page .report-icon {
+    border-color: #d9e4e4;
+    background: #eaf1f2;
+}
+
+.found-report-page .step-number {
+    background: #eaf4f2;
+    color: #247d78;
+}
+
+.found-report-page .progress-fill {
+    background: #247d78;
+}
+
+.found-report-page .progress-header {
+    color: #78643b;
+}
+
+.found-report-page .category-search-field:focus-within {
+    border-color: #5b9992;
+    box-shadow: 0 0 0 3px rgba(36, 125, 120, 0.1);
+}
+
+.found-report-page .category-search-result-action {
+    color: #247d78;
+}
+
+.found-report-page .category-card.selected {
+    border-color: #70a9a2;
+    background: #eef6f4;
+    color: #216f6b;
+    box-shadow: inset 0 0 0 1px #70a9a2;
+}
+
+.found-report-page .category-card.selected strong {
+    color: #216f6b;
+}
+
+.found-report-page .category-card.selected small {
+    color: #557d79;
+}
+
+.found-report-page .selection-status.selected {
+    border-color: #d1e2df;
+    background: #edf5f3;
+    color: #315f5a;
+}
+
+.found-report-page .next-button:hover,
+.found-report-page .submit-report-button:hover {
+    background: #1c6e69;
+}

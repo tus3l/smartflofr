@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>نظام المفقودات والمعثورات الذكي</title>
+
+    <link rel="stylesheet" href="../css/main.css?v=20261001-2">
+    <meta name="theme-color" content="#183f39">
+    <link rel="stylesheet" href="../css/ui-theme.css?v=20261006-4">
+    <script src="../js/ui-theme.js?v=20261006-3" defer></script>
+</head>
+
+<body class="auth-page">
+
+    <main class="auth-wrapper">
+
+        <section class="auth-brand">
+
+            <div class="brand-icon">
+                <span>⌖</span>
+            </div>
+
+            <h1>
+                المفقودات والمعثورات
+            </h1>
+
+            <p>
+                نظام ذكي لخدمة سكان ينبع والمساعدة في إعادة المفقودات لأصحابها.
+            </p>
+            <img class="hero-art" src="../assets/reunion.svg" alt="حقيبة وجوال ومفتاح، أغراض نساعد في إعادتها لأصحابها" width="460" height="330">
+            <div class="auth-location"><span aria-hidden="true">📍</span>ينبع البحر · ينبع الصناعية</div>
+
+        </section>
+
+
+        <section class="auth-card">
+
+            <div class="auth-tabs">
+
+                <button
+                    type="button"
+                    class="auth-tab active"
+                    data-target="loginForm"
+                >
+                    تسجيل الدخول
+                </button>
+
+                <button
+                    type="button"
+                    class="auth-tab"
+                    data-target="registerForm"
+                >
+                    إنشاء حساب
+                </button>
+
+            </div>
+
+
+            <!-- تسجيل الدخول -->
+
+            <form id="loginForm" class="auth-form active">
+
+                <div class="form-header">
+
+                    <h2>
+                        أهلاً بك
+                    </h2>
+
+                    <p>
+                        سجل دخولك للمتابعة
+                    </p>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="loginIdentifier">
+                        رقم الجوال أو البريد الإلكتروني
+                    </label>
+
+                    <input
+                        id="loginIdentifier"
+                        type="text"
+                        placeholder="05xxxxxxxx أو example@email.com"
+                        autocomplete="username"
+                        required
+                    >
+
+                    <small class="field-error"></small>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="loginPassword">
+                        كلمة المرور
+                    </label>
+
+                    <div class="password-field">
+
+                        <input
+                            id="loginPassword"
+                            type="password"
+                            placeholder="أدخل كلمة المرور"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-input="loginPassword"
+                        >
+                            إظهار
+                        </button>
+
+                    </div>
+
+                    <small class="field-error"></small>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    تسجيل الدخول
+                </button>
+
+
+                <button
+                    type="button"
+                    class="text-button"
+                    id="forgotPasswordButton"
+                >
+                    نسيت كلمة المرور؟
+                </button>
+
+            </form>
+
+
+            <!-- إنشاء حساب -->
+
+            <form id="registerForm" class="auth-form">
+
+                <div class="form-header">
+
+                    <h2>
+                        إنشاء حساب جديد
+                    </h2>
+
+                    <p>
+                        لنبدأ بمعلومات بسيطة
+                    </p>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="registerName">
+                        الاسم
+                    </label>
+
+                    <input
+                        id="registerName"
+                        type="text"
+                        placeholder="اكتب اسمك"
+                        maxlength="150"
+                        required
+                    >
+
+                    <small class="field-error"></small>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="registerIdentifier">
+                        رقم الجوال أو البريد الإلكتروني
+                    </label>
+
+                    <input
+                        id="registerIdentifier"
+                        type="text"
+                        placeholder="05xxxxxxxx أو example@email.com"
+                        required
+                    >
+
+                    <small class="field-error"></small>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="registerPassword">
+                        كلمة المرور
+                    </label>
+
+                    <div class="password-field">
+
+                        <input
+                            id="registerPassword"
+                            type="password"
+                            placeholder="6 أحرف على الأقل"
+                            minlength="6"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-input="registerPassword"
+                        >
+                            إظهار
+                        </button>
+
+                    </div>
+
+                    <small class="field-error"></small>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    إنشاء الحساب
+                </button>
+
+            </form>
+
+
+            <div
+                id="authMessage"
+                class="message-box"
+            ></div>
+
+        </section>
+
+    </main>
+
+
+    <script src="../js/auth.js?v=20261006-3"></script>
+
+</body>
+</html>

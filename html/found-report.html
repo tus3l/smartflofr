@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>تسجيل معثور | نظام المفقودات والمعثورات</title>
+
+    <link rel="stylesheet" href="../css/main.css?v=20261001-2">
+    <link rel="stylesheet" href="../css/found-report.css?v=20261001-2">
+    <link rel="stylesheet" href="../css/found-report-polish.css?v=20261001-2">
+    <meta name="theme-color" content="#183f39">
+    <link rel="stylesheet" href="../css/ui-theme.css?v=20261006-4">
+    <script src="../js/ui-theme.js?v=20261006-3" defer></script>
+</head>
+
+<body class="report-page found-report-page">
+
+<header class="report-topbar">
+
+    <div class="report-topbar-inner">
+
+        <button
+            type="button"
+            class="back-button"
+            id="backHomeButton"
+            aria-label="العودة للرئيسية"
+        >
+            →
+        </button>
+
+        <div>
+            <span>تسجيل بلاغ</span>
+            <strong>شيء معثور عليه</strong>
+        </div>
+
+        <div class="topbar-status">
+            عاثر
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="report-container">
+
+    <!-- ==============================
+         HEADER
+    =============================== -->
+
+    <section class="report-intro">
+
+        <div class="report-icon">
+            📦
+        </div>
+
+        <div>
+
+            <span class="small-label">
+                ساهم في إعادة غرض إلى صاحبه
+            </span>
+
+            <h1>
+                سجّل غرضًا عثرت عليه
+            </h1>
+
+            <p>
+                اختر الغرض وأضف ما تعرفه عنه. سنتولى إيصال البلاغ لمن يبحث عنه.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==============================
+         PROGRESS
+    =============================== -->
+
+    <section class="progress-card">
+
+        <div class="progress-header">
+
+            <span id="stepText">
+                الخطوة 1 من 5
+            </span>
+
+            <span id="progressPercent">
+                20%
+            </span>
+
+        </div>
+
+        <div class="progress-track">
+
+            <div
+                class="progress-fill"
+                id="progressFill"
+            ></div>
+
+        </div>
+
+    
+        <ol class="report-stage-list" aria-label="مراحل تعبئة البلاغ"><li class="report-stage current" data-report-stage="1" aria-current="step"><span>1</span>الغرض</li><li class="report-stage" data-report-stage="2"><span>2</span>التفاصيل</li><li class="report-stage" data-report-stage="3"><span>3</span>الصورة</li><li class="report-stage" data-report-stage="4"><span>4</span>الموقع</li><li class="report-stage" data-report-stage="5"><span>5</span>المراجعة</li></ol>
+    </section>
+
+
+    <form id="foundReportForm">
+
+
+        <!-- =====================================================
+             STEP 1 - CATEGORY
+        ====================================================== -->
+
+        <section
+            class="form-step active"
+            data-step="1"
+        >
+
+            <div class="step-heading">
+
+                <span class="step-number">
+                    1
+                </span>
+
+                <div>
+
+                    <h2>
+                        ما الغرض الذي وجدته؟
+                    </h2>
+
+                    <p>
+                        ابحث عنه مباشرة أو اختر فئته من القائمة.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="category-finder">
+
+                <label for="categorySearch">
+                    ابحث باسم الغرض
+                </label>
+
+                <div class="category-search-field">
+
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                        <path d="m16 16 4.2 4.2"></path>
+                    </svg>
+
+                    <input
+                        type="search"
+                        id="categorySearch"
+                        placeholder="مثال: جوال أو مفتاح سيارة"
+                        autocomplete="off"
+                        role="combobox"
+                        aria-autocomplete="list"
+                        aria-controls="categorySearchResults"
+                        aria-expanded="false"
+                    >
+
+                </div>
+
+                <div class="category-search-hints" aria-label="اقتراحات بحث شائعة">
+                    <span>جرّب:</span>
+                    <button type="button" data-search-query="جوال">جوال</button>
+                    <button type="button" data-search-query="مفتاح سيارة">مفتاح سيارة</button>
+                    <button type="button" data-search-query="محفظة">محفظة</button>
+                    <button type="button" data-search-query="قط">قط</button>
+                </div>
+
+                <div
+                    class="category-search-results"
+                    id="categorySearchResults"
+                    role="listbox"
+                    aria-label="اقتراحات الأغراض"
+                    hidden
+                ></div>
+
+            </div>
+
+            <div class="category-browse-divider">
+                <span>أو تصفّح التصنيفات</span>
+            </div>
+
+            <div
+                class="category-grid"
+                id="categoryGrid"
+            >
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="animal"
+                    data-name="حيوان"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">🐾</span>
+                    <strong>حيوان</strong>
+                    <small>قطط، طيور، وغيرها</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="electronics"
+                    data-name="إلكترونيات"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">📱</span>
+                    <strong>إلكترونيات</strong>
+                    <small>جوالات، سماعات، وأجهزة</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="wallets"
+                    data-name="محافظ وحقائب"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">👛</span>
+                    <strong>محافظ وحقائب</strong>
+                    <small>محافظ، حقائب، وشنط</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="keys"
+                    data-name="مفاتيح"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">🔑</span>
+                    <strong>مفاتيح</strong>
+                    <small>منزل، سيارة، أو مجموعة</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="documents"
+                    data-name="أوراق ومستندات"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">📄</span>
+                    <strong>أوراق ومستندات</strong>
+                    <small>هوية، رخصة، أو بطاقة</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="jewelry"
+                    data-name="ساعات ومجوهرات"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">⌚</span>
+                    <strong>ساعات ومجوهرات</strong>
+                    <small>ساعات، خواتم، وسلاسل</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="clothes"
+                    data-name="ملابس"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">👕</span>
+                    <strong>ملابس</strong>
+                    <small>ملابس، أحذية، وإكسسوارات</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="personal"
+                    data-name="أغراض شخصية"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">🎒</span>
+                    <strong>أغراض شخصية</strong>
+                    <small>نظارات، مظلات، وكتب</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="sports"
+                    data-name="رياضة"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">⚽</span>
+                    <strong>رياضة</strong>
+                    <small>كرات، مضارب، ومعدات</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="toys"
+                    data-name="ألعاب"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">🧸</span>
+                    <strong>ألعاب</strong>
+                    <small>ألعاب أطفال وتعليمية</small>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="category-card"
+                    data-category="other"
+                    data-name="غير ذلك"
+                    aria-pressed="false"
+                >
+                    <span aria-hidden="true">📦</span>
+                    <strong>غير ذلك</strong>
+                    <small>لم أجد تصنيفاً مناسباً</small>
+                </button>
+
+            </div>
+
+
+            <div
+                class="selection-status"
+                id="categorySelectionStatus"
+                role="status"
+                aria-live="polite"
+            >
+                لم يتم اختيار قسم حتى الآن.
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STEP 2 - DETAILS
+        ====================================================== -->
+
+        <section
+            class="form-step"
+            data-step="2"
+        >
+
+            <div class="step-heading">
+
+                <span class="step-number">
+                    2
+                </span>
+
+                <div>
+
+                    <h2>
+                        خلنا نعرف عنه أكثر
+                    </h2>
+
+                    <p>
+                        الأسئلة تتغير حسب نوع الغرض.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="dynamicFields"
+                class="dynamic-fields"
+            ></div>
+
+
+            <div class="form-block">
+
+                <label>
+                    اللون الأساسي
+                </label>
+
+                <p class="field-help">
+                    اختر أقرب لون للغرض.
+                </p>
+
+                <div
+                    class="color-grid"
+                    id="primaryColors"
+                ></div>
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label>
+                    هل يوجد لون ثانوي؟
+                </label>
+
+                <div
+                    class="color-grid secondary-colors"
+                    id="secondaryColors"
+                ></div>
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label for="distinctiveMarks">
+                    هل فيه علامة مميزة؟
+                </label>
+
+                <textarea
+                    id="distinctiveMarks"
+                    rows="4"
+                    placeholder="مثال: كسر بسيط، خدش، ملصق، كتابة، طوق بلون معين..."
+                ></textarea>
+
+                <p class="privacy-note">
+                    🔒 يمكن استخدام العلامة المميزة للتحقق من صاحب الغرض.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STEP 3 - DESCRIPTION / PHOTO
+        ====================================================== -->
+
+        <section
+            class="form-step"
+            data-step="3"
+        >
+
+            <div class="step-heading">
+
+                <span class="step-number">
+                    3
+                </span>
+
+                <div>
+
+                    <h2>
+                        الوصف والصورة
+                    </h2>
+
+                    <p>
+                        كل معلومة إضافية ترفع دقة المطابقة.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label for="itemDescription">
+                    أفضل وصف للغرض
+                </label>
+
+                <textarea
+                    id="itemDescription"
+                    rows="6"
+                    placeholder="اكتب وصف واضح للغرض..."
+                ></textarea>
+
+                <div
+                    class="description-example"
+                    id="descriptionExample"
+                >
+                    مثال: جوال أسود بكفر شفاف ويوجد خدش بسيط في الزاوية.
+                </div>
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label>
+                    صورة الغرض
+                </label>
+
+                <p class="field-help">
+                    الصورة غير إجبارية، لكنها تساعد كثير في المطابقة.
+                </p>
+
+
+                <div class="photo-options">
+
+
+                    <button
+                        type="button"
+                        class="photo-option"
+                        data-photo="camera"
+                    >
+                        <span>📷</span>
+
+                        <div>
+                            <strong>تصوير الآن</strong>
+                            <small>استخدام الكاميرا</small>
+                        </div>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="photo-option"
+                        data-photo="gallery"
+                    >
+                        <span>🖼️</span>
+
+                        <div>
+                            <strong>رفع من المعرض</strong>
+                            <small>اختيار صورة موجودة</small>
+                        </div>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="photo-option"
+                        data-photo="cannot"
+                    >
+                        <span>🚫</span>
+
+                        <div>
+                            <strong>لا يمكنني التصوير</strong>
+                            <small>المتابعة بدون صورة</small>
+                        </div>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="photo-option"
+                        data-photo="later"
+                    >
+                        <span>⏱️</span>
+
+                        <div>
+                            <strong>لا أرغب حالياً</strong>
+                            <small>يمكن إضافتها لاحقاً</small>
+                        </div>
+                    </button>
+
+
+                </div>
+
+
+                <input
+                    type="file"
+                    id="cameraInput"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                >
+
+                <input
+                    type="file"
+                    id="galleryInput"
+                    accept="image/*"
+                    hidden
+                >
+
+
+                <div
+                    class="image-preview-wrapper"
+                    id="imagePreviewWrapper"
+                >
+
+                    <img
+                        id="imagePreview"
+                        alt="معاينة الصورة"
+                    >
+
+                    <button
+                        type="button"
+                        id="removeImageButton"
+                    >
+                        إزالة الصورة
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STEP 4 - LOCATION
+        ====================================================== -->
+
+        <section
+            class="form-step"
+            data-step="4"
+        >
+
+            <div class="step-heading">
+
+                <span class="step-number">
+                    4
+                </span>
+
+                <div>
+
+                    <h2>
+                        وين لقيت الغرض؟
+                    </h2>
+
+                    <p>
+                        الموقع يساعد النظام بشكل كبير في المطابقة.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="location-choice-grid">
+
+
+                <button
+                    type="button"
+                    class="location-choice"
+                    id="currentLocationChoice"
+                >
+
+                    <span>
+                        📍
+                    </span>
+
+                    <div>
+                        <strong>
+                            أنا في مكان العثور الآن
+                        </strong>
+
+                        <small>
+                            تحديد الموقع الحالي
+                        </small>
+                    </div>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="location-choice"
+                    id="manualLocationChoice"
+                >
+
+                    <span>
+                        🗺️
+                    </span>
+
+                    <div>
+                        <strong>
+                            أنا لست في مكان العثور
+                        </strong>
+
+                        <small>
+                            تحديد المنطقة والحي يدوياً
+                        </small>
+                    </div>
+
+                </button>
+
+            </div>
+
+
+            <!-- GPS -->
+
+            <div
+                class="location-box"
+                id="gpsLocationBox"
+            >
+
+                <button
+                    type="button"
+                    class="gps-button"
+                    id="getLocationButton"
+                >
+                    📍 تحديد موقعي الحالي
+                </button>
+
+
+                <div
+                    class="gps-status"
+                    id="gpsStatus"
+                >
+                    لم يتم تحديد الموقع.
+                </div>
+
+
+                <div
+                    class="coordinates-card"
+                    id="coordinatesCard"
+                >
+
+                    <div>
+
+                        <span>
+                            Latitude
+                        </span>
+
+                        <strong id="latitudeText">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Longitude
+                        </span>
+
+                        <strong id="longitudeText">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            دقة الموقع
+                        </span>
+
+                        <strong id="accuracyText">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- MANUAL -->
+
+            <div
+                class="location-box"
+                id="manualLocationBox"
+            >
+
+                <div class="form-block">
+
+                    <label for="yanbuRegion">
+                        المنطقة
+                    </label>
+
+                    <select id="yanbuRegion">
+
+                        <option value="">
+                            اختر المنطقة
+                        </option>
+
+                        <option value="yanbu-al-bahr">
+                            ينبع البحر
+                        </option>
+
+                        <option value="yanbu-industrial">
+                            ينبع الصناعية
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-block">
+
+                    <label for="neighborhoodInput">
+                        اسم الحي
+                    </label>
+
+                    <input
+                        id="neighborhoodInput"
+                        type="text"
+                        placeholder="اكتب اسم الحي"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label for="locationDescription">
+                    وصف المكان
+                </label>
+
+                <input
+                    id="locationDescription"
+                    type="text"
+                    placeholder="مثال: عند مدخل السوق، بجانب الحديقة..."
+                >
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label for="foundDate">
+                    تاريخ العثور
+                </label>
+
+                <input
+                    type="date"
+                    id="foundDate"
+                >
+
+            </div>
+
+
+            <div class="form-block">
+
+                <label for="foundTime">
+                    الوقت التقريبي
+                </label>
+
+                <input
+                    type="time"
+                    id="foundTime"
+                >
+
+            </div>
+
+
+            <div class="location-security">
+                🔒 الموقع الدقيق يظهر للإدارة فقط ولن يتم نشر الإحداثيات للعامة.
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STEP 5 - REVIEW
+        ====================================================== -->
+
+        <section
+            class="form-step"
+            data-step="5"
+        >
+
+            <div class="step-heading">
+
+                <span class="step-number">
+                    5
+                </span>
+
+                <div>
+
+                    <h2>
+                        تأكد من البلاغ
+                    </h2>
+
+                    <p>
+                        راجع المعلومات قبل الإرسال للإدارة.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="reportSummary"
+                class="report-summary"
+            ></div>
+
+
+            <div class="admin-info-box">
+
+                <span>
+                    🛡️
+                </span>
+
+                <div>
+
+                    <strong>
+                        ماذا يحدث بعد الإرسال؟
+                    </strong>
+
+                    <p>
+                        يدخل البلاغ مباشرة إلى لوحة الإدارة،
+                        ويقوم النظام بمقارنته تلقائياً مع بلاغات
+                        المفقودات وعرض أقوى التطابقات للإدارة.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-report-button"
+            >
+                إرسال البلاغ للإدارة
+            </button>
+
+        </section>
+
+
+
+        <!-- ============================
+             NAVIGATION
+        ============================= -->
+
+        <div class="step-navigation">
+
+            <button
+                type="button"
+                class="secondary-button"
+                id="previousButton"
+            >
+                السابق
+            </button>
+
+
+            <button
+                type="button"
+                class="next-button"
+                id="nextButton"
+            >
+                التالي
+            </button>
+
+        </div>
+
+
+    </form>
+
+
+    <aside class="report-guide" aria-labelledby="reportGuideTitle">
+        <div class="guide-kicker"><span aria-hidden="true">⌖</span>كل تفصيلة تفرق</div>
+        <h2 id="reportGuideTitle">بلاغ أوضح،<br>فرصة أقرب للوصول.</h2>
+        <p>ما تحتاج تعرف كل شيء. ابدأ بالمعلومات المتاحة عندك وأضف التفاصيل التي تميّز الغرض.</p>
+        <ol>
+            <li><div><strong>اختر التصنيف المناسب</strong><p>ابحث باسم الغرض أو اختره من البطاقات.</p></div></li>
+            <li><div><strong>اذكر ما يميّزه</strong><p>اللون، الماركة، أو علامة خاصة تساعد في المطابقة.</p></div></li>
+            <li><div><strong>حدّد المكان والتاريخ</strong><p>المكان الأقرب والوقت التقريبي يساعدان في البحث.</p></div></li>
+        </ol>
+        <div class="guide-note"><span aria-hidden="true">🔒</span><span>العلامات المميزة متاحة للإدارة للمساعدة في التحقق من الملكية.</span></div>
+    </aside>
+</main>
+
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script src="../js/session.js"></script>
+<script src="../js/found-report.js?v=20261006-3"></script>
+
+</body>
+
+</html>
