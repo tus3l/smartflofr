@@ -12,9 +12,17 @@
     <title>لوحة الإدارة | المفقودات والمعثورات</title>
 
     <link rel="stylesheet" href="../css/main.css?v=20261001-2">
-    <link rel="stylesheet" href="../css/admin-dashboard.css?v=20261001-2">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    >
+    <link rel="stylesheet" href="../css/admin-dashboard.css?v=20261019-4">
     <meta name="theme-color" content="#183f39">
-    <link rel="stylesheet" href="../css/ui-theme.css?v=20261006-4">
+    <link rel="icon" type="image/png" href="../assets/favicon.png">
+    <link rel="apple-touch-icon" href="../assets/logo-mark.png">
+    <link rel="stylesheet" href="../css/ui-theme.css?v=20261019-1">
     <script src="../js/ui-theme.js?v=20261006-3" defer></script>
 </head>
 
@@ -32,10 +40,6 @@
 >
 
     <div class="admin-brand">
-
-        <div class="admin-brand-icon">
-            ⌖
-        </div>
 
         <div>
             <strong>
@@ -201,8 +205,8 @@
                 لوحة التحكم
             </span>
 
-            <h1>
-                متابعة البلاغات
+            <h1 id="adminPageTitle">
+                تحليلات الموقع
             </h1>
 
         </div>
@@ -238,6 +242,248 @@
 
 
     <main class="admin-content">
+
+
+        <!-- =========================
+             ANALYTICS VIEW (HOME)
+        ========================= -->
+
+        <div
+            class="admin-view analytics-view"
+            id="analyticsView"
+        >
+
+            <section class="stats-grid analytics-kpis">
+
+                <article class="stat-card">
+
+                    <div class="stat-icon">
+                        📋
+                    </div>
+
+                    <div>
+                        <span>إجمالي البلاغات</span>
+                        <strong id="kpiTotalReports">0</strong>
+                        <small id="kpiTotalBreakdown">-</small>
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon">
+                        ✅
+                    </div>
+
+                    <div>
+                        <span>نسبة الإعادة</span>
+                        <strong id="kpiReturnRate">0%</strong>
+                        <small id="kpiReturnBreakdown">-</small>
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon">
+                        🧠
+                    </div>
+
+                    <div>
+                        <span>متوسط دقة التطابق</span>
+                        <strong id="kpiAvgMatch">0%</strong>
+                        <small id="kpiAvgMatchNote">-</small>
+                    </div>
+
+                </article>
+
+
+                <article class="stat-card">
+
+                    <div class="stat-icon">
+                        📞
+                    </div>
+
+                    <div>
+                        <span>تحتاج متابعة</span>
+                        <strong id="kpiPending">0</strong>
+                        <small id="kpiPendingNote">-</small>
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <div class="analytics-grid analytics-grid-main">
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">النشاط</span>
+                            <h2>البلاغات اليومية</h2>
+                        </div>
+
+                        <div class="chart-legend">
+                            <span><i class="legend-swatch lost"></i>فاقد</span>
+                            <span><i class="legend-swatch found"></i>عاثر</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="activity-chart"
+                        id="activityChart"
+                    ></div>
+
+                </section>
+
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">سير العمل</span>
+                            <h2>حالات البلاغات</h2>
+                        </div>
+                    </div>
+
+                    <div
+                        class="status-donut"
+                        id="statusDonut"
+                    ></div>
+
+                </section>
+
+            </div>
+
+
+            <div class="analytics-grid analytics-grid-three">
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">الأقسام</span>
+                            <h2>الأكثر بلاغاً</h2>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bar-list"
+                        id="categoryBars"
+                    ></div>
+
+                </section>
+
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">المواقع</span>
+                            <h2>الأحياء الأكثر نشاطاً</h2>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bar-list"
+                        id="neighborhoodBars"
+                    ></div>
+
+                </section>
+
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">ذكاء النظام</span>
+                            <h2>جودة التطابقات</h2>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bar-list"
+                        id="matchQualityBars"
+                    ></div>
+
+                </section>
+
+            </div>
+
+
+            <div class="analytics-grid analytics-grid-three">
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">التوزيع</span>
+                            <h2>فاقد مقابل عاثر</h2>
+                        </div>
+                    </div>
+
+                    <div id="typeSplit"></div>
+
+                </section>
+
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">المناطق</span>
+                            <h2>ينبع البحر والصناعية</h2>
+                        </div>
+                    </div>
+
+                    <div id="regionSplit"></div>
+
+                </section>
+
+
+                <section class="dashboard-section analytics-card">
+
+                    <div class="section-header">
+                        <div>
+                            <span class="section-eyebrow">آخر التحديثات</span>
+                            <h2>أحدث البلاغات</h2>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="simple-button"
+                            id="analyticsShowAllReports"
+                        >
+                            كل البلاغات
+                        </button>
+                    </div>
+
+                    <ul
+                        class="recent-reports"
+                        id="recentReports"
+                    ></ul>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             REPORTS VIEW
+        ========================= -->
+
+        <div
+            class="admin-view reports-view"
+            id="reportsView"
+            hidden
+        >
 
 
         <!-- =========================
@@ -579,6 +825,106 @@
         </section>
 
 
+
+        <!-- =========================
+             LOST ITEMS MAP
+        ========================= -->
+
+        <section
+            class="dashboard-section lost-map-section"
+            id="lostMapSection"
+            hidden
+        >
+
+            <div class="section-header lost-map-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        🗺️ خريطة ينبع
+                    </span>
+
+                    <h2>
+                        مواقع المفقودات
+                    </h2>
+
+                    <p class="lost-map-subtitle">
+                        اضغط على علامة الموقع لعرض تفاصيل الغرض المفقود.
+                    </p>
+
+                </div>
+
+
+                <div class="lost-map-legend">
+
+                    <span>
+                        <i class="legend-pin exact"></i>
+                        موقع دقيق (GPS)
+                    </span>
+
+                    <span>
+                        <i class="legend-pin approx"></i>
+                        موقع تقريبي (حسب الحي)
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="lost-map-layout">
+
+                <div class="lost-map-frame">
+
+                    <div
+                        class="lost-items-map"
+                        id="lostItemsMap"
+                        role="region"
+                        aria-label="خريطة ينبع توضح مواقع الأغراض المفقودة"
+                    ></div>
+
+
+                    <div
+                        class="lost-map-fallback"
+                        id="lostMapFallback"
+                        hidden
+                    >
+                        تعذر تحميل الخريطة. تأكد من اتصال الإنترنت ثم حدّث الصفحة.
+                    </div>
+
+                </div>
+
+
+                <aside class="lost-map-list-panel">
+
+                    <div class="lost-map-list-head">
+
+                        <strong>
+                            المفقودات على الخريطة
+                        </strong>
+
+                        <span id="lostMapCount">
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <ul
+                        class="lost-map-list"
+                        id="lostMapList"
+                    ></ul>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        </div>
+
+
     </main>
 
 </div>
@@ -643,7 +989,13 @@
 ></div>
 
 
-<script src="../js/admin-dashboard.js"></script>
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+
+<script src="../js/admin-dashboard.js?v=20261019-6"></script>
 
 </body>
 </html>

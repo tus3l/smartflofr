@@ -601,6 +601,72 @@ const statusLabels = {
 
 
 /* ======================================================
+   LOST ITEMS MAP CONFIG
+====================================================== */
+
+const YANBU_CENTER = [24.06, 38.11];
+
+const YANBU_DEFAULT_ZOOM = 11;
+
+
+/* Approximate centres used when a report has no GPS coordinates. */
+const yanbuNeighborhoodCoordinates = {
+
+    "البندر":
+        [24.0957861, 38.0278230],
+
+    "الصريف":
+        [24.0810215, 38.0452220],
+
+    "الشاطئ":
+        [24.0843796, 38.0244849],
+
+    "الفيصل":
+        [24.0271149, 38.2045363],
+
+    "خالد":
+        [24.0033482, 38.1751567],
+
+    "الخالد":
+        [24.0033482, 38.1751567]
+
+};
+
+
+const yanbuRegionCoordinates = {
+
+    "ينبع البحر":
+        [24.0895, 38.0618],
+
+    "ينبع الصناعية":
+        [23.9988327, 38.2028069]
+
+};
+
+
+const categoryMapIcons = {
+
+    "إلكترونيات": "📱",
+
+    "حيوانات": "🐾",
+
+    "محافظ وحقائب": "👛",
+
+    "مفاتيح": "🔑",
+
+    "أوراق ومستندات": "📄"
+
+};
+
+
+let lostItemsMap = null;
+
+let lostItemsLayer = null;
+
+const lostItemMarkers = new Map();
+
+
+/* ======================================================
    INITIALIZE
 ====================================================== */
 
@@ -620,6 +686,53 @@ function renderDashboard() {
     renderReports();
 
     renderSidebarCounts();
+
+    renderAnalytics();
+
+}
+
+
+/* ======================================================
+   VIEWS
+====================================================== */
+
+const adminViewTitles = {
+
+    analytics:
+        "تحليلات الموقع",
+
+    reports:
+        "متابعة البلاغات"
+
+};
+
+
+function showAdminView(
+    view
+) {
+
+    document
+        .getElementById(
+            "analyticsView"
+        )
+        .hidden =
+        view !== "analytics";
+
+
+    document
+        .getElementById(
+            "reportsView"
+        )
+        .hidden =
+        view !== "reports";
+
+
+    document
+        .getElementById(
+            "adminPageTitle"
+        )
+        .textContent =
+        adminViewTitles[view];
 
 }
 
@@ -933,6 +1046,9 @@ function renderReports() {
     renderMobileReports(
         filtered
     );
+
+
+    syncLostMapSection();
 
 }
 
@@ -2363,13 +2479,76 @@ document
                     }
 
 
+                    if (
+                        button.dataset.section ===
+                        "dashboard"
+                    ) {
+
+                        currentTypeFilter =
+                            "all";
+
+
+                        currentStatusFilter =
+                            "all";
+
+
+                        document
+                            .getElementById(
+                                "reportTypeFilter"
+                            )
+                            .value =
+                            "all";
+
+
+                        document
+                            .getElementById(
+                                "reportStatusFilter"
+                            )
+                            .value =
+                            "all";
+
+                    }
+
+
+                    showAdminView(
+                        button.dataset.section ===
+                        "dashboard"
+                            ? "analytics"
+                            : "reports"
+                    );
+
+
                     renderReports();
 
 
                     closeSidebarMobile();
 
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
                 }
             );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "analyticsShowAllReports"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .querySelector(
+                    ".admin-nav-item[data-filter-type=\"all\"]"
+                )
+                .click();
 
         }
     );
@@ -2480,6 +2659,1723 @@ function closeSidebarMobile() {
     sidebar.classList.remove(
         "open"
     );
+
+}
+
+
+/* ======================================================
+   LOST ITEMS MAP
+====================================================== */
+
+function normalizeNeighborhoodName(
+    name
+) {
+
+    return String(name || "")
+        .replace(/^\s*حي\s+/, "")
+        .trim();
+
+}
+
+
+function getReportMapPosition(
+    report
+) {
+
+    const latitude =
+        parseFloat(report.latitude);
+
+    const longitude =
+        parseFloat(report.longitude);
+
+
+    if (
+        Number.isFinite(latitude) &&
+        Number.isFinite(longitude)
+    ) {
+
+        return {
+            coordinates: [latitude, longitude],
+            exact: true
+        };
+
+    }
+
+
+    const neighborhood =
+        normalizeNeighborhoodName(
+            report.neighborhood
+        );
+
+
+    const base =
+        yanbuNeighborhoodCoordinates[neighborhood] ||
+        yanbuNeighborhoodCoordinates[`ال${neighborhood}`] ||
+        yanbuRegionCoordinates[report.region];
+
+
+    if (!base) {
+        return null;
+    }
+
+
+    // Small deterministic offset so reports in the same neighbourhood don't overlap.
+    const angle =
+        (report.id * 137.5) * Math.PI / 180;
+
+    const offset =
+        0.0012;
+
+
+    return {
+        coordinates: [
+            base[0] + Math.sin(angle) * offset,
+            base[1] + Math.cos(angle) * offset
+        ],
+        exact: false
+    };
+
+}
+
+
+function initLostItemsMap() {
+
+    if (lostItemsMap) {
+        return true;
+    }
+
+
+    const mapElement =
+        document.getElementById(
+            "lostItemsMap"
+        );
+
+
+    if (
+        !mapElement ||
+        typeof L === "undefined"
+    ) {
+
+        const fallback =
+            document.getElementById(
+                "lostMapFallback"
+            );
+
+
+        if (fallback) {
+            fallback.hidden = false;
+        }
+
+
+        return false;
+
+    }
+
+
+    lostItemsMap =
+        L.map(
+            mapElement,
+            {
+                center: YANBU_CENTER,
+                zoom: YANBU_DEFAULT_ZOOM,
+                scrollWheelZoom: false,
+                attributionControl: true
+            }
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>"
+        }
+    ).addTo(
+        lostItemsMap
+    );
+
+
+    lostItemsLayer =
+        L.featureGroup().addTo(
+            lostItemsMap
+        );
+
+
+    lostItemsMap.on(
+        "popupopen",
+        event => {
+
+            const button =
+                event.popup
+                    .getElement()
+                    .querySelector(
+                        ".lost-popup-button"
+                    );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    lostItemsMap.closePopup();
+
+                    openReportDetails(
+                        Number(
+                            button.dataset.reportId
+                        )
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    if (
+        "IntersectionObserver" in window
+    ) {
+
+        // Leaflet needs a size recalculation once the section becomes visible.
+        new IntersectionObserver(
+            entries => {
+
+                if (
+                    entries.some(
+                        entry => entry.isIntersecting
+                    )
+                ) {
+
+                    lostItemsMap.invalidateSize();
+
+                }
+
+            }
+        ).observe(
+            mapElement
+        );
+
+    }
+
+
+    return true;
+
+}
+
+
+function createLostItemIcon(
+    report,
+    exact
+) {
+
+    const icon =
+        categoryMapIcons[report.category] ||
+        "📍";
+
+
+    return L.divIcon({
+
+        className: "lost-pin-wrapper",
+
+        html: `
+            <span
+                class="
+                    lost-pin
+                    ${exact ? "exact" : "approx"}
+                    ${report.status === "completed" ? "completed" : ""}
+                "
+            >
+                <span class="lost-pin-icon">${icon}</span>
+            </span>
+        `,
+
+        iconSize: [38, 48],
+
+        iconAnchor: [19, 46],
+
+        popupAnchor: [0, -42]
+
+    });
+
+}
+
+
+function renderLostItemPopup(
+    report,
+    exact
+) {
+
+    const title =
+        [
+            report.itemType,
+            report.brand &&
+            report.brand !== "غير محدد"
+                ? report.brand
+                : ""
+        ]
+            .filter(Boolean)
+            .join(" - ");
+
+
+    const colors =
+        [
+            report.primaryColor,
+            report.secondaryColor &&
+            report.secondaryColor !== "لا يوجد"
+                ? report.secondaryColor
+                : ""
+        ]
+            .filter(Boolean)
+            .join(" / ");
+
+
+    const location =
+        [
+            report.region,
+            report.neighborhood
+        ]
+            .filter(Boolean)
+            .join(" - ");
+
+
+    const accuracy =
+        exact
+
+            ? (
+                report.accuracy
+                    ? `دقيق (بهامش ${report.accuracy} متر)`
+                    : "دقيق"
+            )
+
+            : "تقريبي حسب الحي";
+
+
+    const row =
+        (label, value) => `
+            <div class="lost-popup-row">
+                <dt>${escapeHTML(label)}</dt>
+                <dd>${escapeHTML(String(value || "-"))}</dd>
+            </div>
+        `;
+
+
+    return `
+
+        <div class="lost-popup" dir="rtl">
+
+            <div class="lost-popup-top">
+
+                <span class="lost-popup-id">
+                    بلاغ فاقد #${report.id}
+                </span>
+
+                <span
+                    class="
+                        status-badge
+                        status-${escapeHTML(report.status)}
+                    "
+                >
+                    ${escapeHTML(statusLabels[report.status] || report.status)}
+                </span>
+
+            </div>
+
+
+            <h3>
+                ${escapeHTML(title || "غرض مفقود")}
+            </h3>
+
+
+            <p class="lost-popup-description">
+                ${escapeHTML(report.description || "")}
+            </p>
+
+
+            <dl class="lost-popup-details">
+
+                ${row("القسم", report.category)}
+
+                ${row("الموديل", report.model)}
+
+                ${row("اللون", colors)}
+
+                ${row("علامات مميزة", report.distinctiveMarks)}
+
+                ${row("المكان", location)}
+
+                ${row("وصف الموقع", report.locationDescription)}
+
+                ${row("تاريخ الفقد", `${formatDate(report.date)}${report.time ? ` - ${report.time}` : ""}`)}
+
+                ${row("دقة الموقع", accuracy)}
+
+                ${row("صاحب البلاغ", report.userName)}
+
+            </dl>
+
+
+            <button
+                type="button"
+                class="lost-popup-button"
+                data-report-id="${report.id}"
+            >
+                عرض التفاصيل الكاملة
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+/* The GPS map is only shown while viewing the lost-items section. */
+function syncLostMapSection() {
+
+    const section =
+        document.getElementById(
+            "lostMapSection"
+        );
+
+
+    if (!section) {
+        return;
+    }
+
+
+    const visible =
+        currentTypeFilter === "lost";
+
+
+    section.hidden =
+        !visible;
+
+
+    if (visible) {
+
+        renderLostItemsMap();
+
+    }
+
+}
+
+
+function renderLostItemsMap() {
+
+    const lostReports =
+        reports.filter(
+            report =>
+                report.type === "lost"
+        );
+
+
+    const plotted =
+        lostReports
+            .map(
+                report => ({
+                    report,
+                    position:
+                        getReportMapPosition(
+                            report
+                        )
+                })
+            );
+
+
+    renderLostMapList(
+        plotted
+    );
+
+
+    if (
+        !initLostItemsMap()
+    ) {
+        return;
+    }
+
+
+    lostItemsMap.invalidateSize();
+
+
+    lostItemsLayer.clearLayers();
+
+    lostItemMarkers.clear();
+
+
+    plotted.forEach(
+        ({ report, position }) => {
+
+            if (!position) {
+                return;
+            }
+
+
+            const marker =
+                L.marker(
+                    position.coordinates,
+                    {
+                        icon:
+                            createLostItemIcon(
+                                report,
+                                position.exact
+                            ),
+                        title:
+                            `${report.itemType} - بلاغ #${report.id}`,
+                        riseOnHover: true
+                    }
+                )
+                    .bindPopup(
+                        renderLostItemPopup(
+                            report,
+                            position.exact
+                        ),
+                        {
+                            maxWidth: 300,
+                            minWidth: 250,
+                            className: "lost-popup-container"
+                        }
+                    )
+                    .addTo(
+                        lostItemsLayer
+                    );
+
+
+            lostItemMarkers.set(
+                report.id,
+                marker
+            );
+
+        }
+    );
+
+
+    if (
+        lostItemMarkers.size > 0
+    ) {
+
+        lostItemsMap.fitBounds(
+            lostItemsLayer.getBounds(),
+            {
+                padding: [40, 40],
+                maxZoom: 14
+            }
+        );
+
+    } else {
+
+        lostItemsMap.setView(
+            YANBU_CENTER,
+            YANBU_DEFAULT_ZOOM
+        );
+
+    }
+
+}
+
+
+function renderLostMapList(
+    plotted
+) {
+
+    const list =
+        document.getElementById(
+            "lostMapList"
+        );
+
+
+    const count =
+        document.getElementById(
+            "lostMapCount"
+        );
+
+
+    if (
+        !list ||
+        !count
+    ) {
+        return;
+    }
+
+
+    count.textContent =
+        plotted.length;
+
+
+    if (
+        plotted.length === 0
+    ) {
+
+        list.innerHTML = `
+            <li class="lost-map-empty">
+                لا توجد بلاغات فاقد حالياً.
+            </li>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        plotted.map(
+            ({ report, position }) => `
+
+                <li>
+
+                    <button
+                        type="button"
+                        class="lost-map-list-item"
+                        data-report-id="${report.id}"
+                        ${position ? "" : "data-unmapped=\"true\""}
+                    >
+
+                        <span class="lost-map-list-icon">
+                            ${categoryMapIcons[report.category] || "📍"}
+                        </span>
+
+
+                        <span class="lost-map-list-text">
+
+                            <strong>
+                                ${escapeHTML(report.itemType)}
+                                -
+                                ${escapeHTML(report.primaryColor || "")}
+                            </strong>
+
+                            <small>
+                                #${report.id}
+                                ·
+                                ${escapeHTML(report.neighborhood || report.region || "بدون موقع")}
+                            </small>
+
+                        </span>
+
+
+                        <span
+                            class="
+                                lost-map-precision
+                                ${position ? (position.exact ? "exact" : "approx") : "none"}
+                            "
+                        >
+                            ${position ? (position.exact ? "GPS" : "تقريبي") : "بدون موقع"}
+                        </span>
+
+                    </button>
+
+                </li>
+
+            `
+        ).join("");
+
+
+    list
+        .querySelectorAll(
+            ".lost-map-list-item"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const reportId =
+                            Number(
+                                button.dataset.reportId
+                            );
+
+
+                        const marker =
+                            lostItemMarkers.get(
+                                reportId
+                            );
+
+
+                        if (
+                            !marker ||
+                            !lostItemsMap
+                        ) {
+
+                            openReportDetails(
+                                reportId
+                            );
+
+                            return;
+
+                        }
+
+
+                        const target =
+                            marker.getLatLng();
+
+
+                        const alreadyThere =
+                            lostItemsMap.getZoom() === 15 &&
+                            lostItemsMap
+                                .getCenter()
+                                .distanceTo(target) < 5;
+
+
+                        document
+                            .getElementById(
+                                "lostItemsMap"
+                            )
+                            .scrollIntoView({
+                                behavior: "smooth",
+                                block: "nearest"
+                            });
+
+
+                        if (alreadyThere) {
+
+                            marker.openPopup();
+
+                            return;
+
+                        }
+
+
+                        lostItemsMap.once(
+                            "moveend",
+                            () => marker.openPopup()
+                        );
+
+
+                        lostItemsMap.flyTo(
+                            target,
+                            15,
+                            {
+                                duration: 0.6
+                            }
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* ======================================================
+   SITE ANALYTICS (HOME)
+====================================================== */
+
+function renderAnalytics() {
+
+    const total =
+        reports.length;
+
+
+    const lost =
+        reports.filter(
+            report =>
+                report.type === "lost"
+        );
+
+
+    const found =
+        reports.filter(
+            report =>
+                report.type === "found"
+        );
+
+
+    const completed =
+        reports.filter(
+            report =>
+                report.status === "completed"
+        ).length;
+
+
+    const matched =
+        reports.filter(
+            report =>
+                Number(report.bestMatch) > 0
+        );
+
+
+    const avgMatch =
+        matched.length
+
+            ? Math.round(
+                matched.reduce(
+                    (sum, report) =>
+                        sum + Number(report.bestMatch),
+                    0
+                ) / matched.length
+            )
+
+            : 0;
+
+
+    const strong =
+        matched.filter(
+            report =>
+                report.bestMatch >= 85
+        ).length;
+
+
+    const pending =
+        reports.filter(
+            report =>
+                report.status !== "completed" &&
+                report.status !== "rejected"
+        );
+
+
+    const countStatus =
+        status =>
+            reports.filter(
+                report =>
+                    report.status === status
+            ).length;
+
+
+    setAnalyticsText(
+        "kpiTotalReports",
+        total
+    );
+
+    setAnalyticsText(
+        "kpiTotalBreakdown",
+        `${lost.length} فاقد · ${found.length} عاثر`
+    );
+
+    setAnalyticsText(
+        "kpiReturnRate",
+        `${percentOf(completed, total)}%`
+    );
+
+    setAnalyticsText(
+        "kpiReturnBreakdown",
+        `${completed} من ${total} بلاغ تم تسليمها`
+    );
+
+    setAnalyticsText(
+        "kpiAvgMatch",
+        `${avgMatch}%`
+    );
+
+    setAnalyticsText(
+        "kpiAvgMatchNote",
+        `${strong} تطابق قوي (85% فأكثر)`
+    );
+
+    setAnalyticsText(
+        "kpiPending",
+        pending.length
+    );
+
+    setAnalyticsText(
+        "kpiPendingNote",
+        `${countStatus("new")} جديد · ${countStatus("contact")} بانتظار التواصل`
+    );
+
+
+    renderActivityChart();
+
+    renderStatusDonut();
+
+    renderCategoryBars();
+
+    renderNeighborhoodBars();
+
+    renderMatchQualityBars();
+
+    renderTypeSplit(
+        lost.length,
+        found.length
+    );
+
+    renderRegionSplit();
+
+    renderRecentReports();
+
+}
+
+
+function setAnalyticsText(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (element) {
+        element.textContent =
+            value;
+    }
+
+}
+
+
+function percentOf(
+    value,
+    total
+) {
+
+    return total
+
+        ? Math.round(
+            value / total * 100
+        )
+
+        : 0;
+
+}
+
+
+function toDateKey(
+    date
+) {
+
+    return date
+        .toISOString()
+        .slice(0, 10);
+
+}
+
+
+function renderActivityChart() {
+
+    const container =
+        document.getElementById(
+            "activityChart"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const dates =
+        reports
+            .map(
+                report =>
+                    report.date
+            )
+            .filter(Boolean)
+            .sort();
+
+
+    if (
+        dates.length === 0
+    ) {
+
+        container.innerHTML =
+            `<p class="analytics-empty">لا توجد بيانات بعد.</p>`;
+
+        return;
+
+    }
+
+
+    const daysCount =
+        10;
+
+
+    const latest =
+        new Date(
+            `${dates[dates.length - 1]}T00:00:00Z`
+        );
+
+
+    const days =
+        Array.from(
+            { length: daysCount },
+            (_, index) => {
+
+                const day =
+                    new Date(latest);
+
+
+                day.setUTCDate(
+                    latest.getUTCDate() -
+                    (daysCount - 1 - index)
+                );
+
+
+                const key =
+                    toDateKey(day);
+
+
+                const dayReports =
+                    reports.filter(
+                        report =>
+                            report.date === key
+                    );
+
+
+                return {
+                    key,
+                    lost:
+                        dayReports.filter(
+                            report =>
+                                report.type === "lost"
+                        ).length,
+                    found:
+                        dayReports.filter(
+                            report =>
+                                report.type === "found"
+                        ).length
+                };
+
+            }
+        );
+
+
+    const max =
+        Math.max(
+            1,
+            ...days.map(
+                day =>
+                    Math.max(
+                        day.lost,
+                        day.found
+                    )
+            )
+        );
+
+
+    const labelFormatter =
+        new Intl.DateTimeFormat(
+            "ar-SA-u-ca-gregory",
+            {
+                day: "numeric",
+                month: "short",
+                timeZone: "UTC"
+            }
+        );
+
+
+    const bar =
+        (value, type) => `
+            <span
+                class="activity-bar ${type}"
+                style="height:${Math.max(value / max * 100, value ? 8 : 0)}%"
+            >
+                ${value ? `<em>${value}</em>` : ""}
+            </span>
+        `;
+
+
+    const periodTotal =
+        days.reduce(
+            (sum, day) =>
+                sum + day.lost + day.found,
+            0
+        );
+
+
+    container.innerHTML = `
+
+        <div class="activity-bars">
+
+            ${days.map(
+                day => `
+
+                    <div
+                        class="activity-day"
+                        title="${labelFormatter.format(new Date(`${day.key}T00:00:00Z`))}: ${day.lost} فاقد، ${day.found} عاثر"
+                    >
+
+                        <div class="activity-columns">
+                            ${bar(day.lost, "lost")}
+                            ${bar(day.found, "found")}
+                        </div>
+
+                        <small>
+                            ${labelFormatter.format(new Date(`${day.key}T00:00:00Z`))}
+                        </small>
+
+                    </div>
+
+                `
+            ).join("")}
+
+        </div>
+
+
+        <p class="chart-footnote">
+            آخر ${daysCount} أيام حتى
+            ${formatDate(days[days.length - 1].key)}
+            · ${periodTotal} بلاغ خلال الفترة
+        </p>
+
+    `;
+
+}
+
+
+function renderStatusDonut() {
+
+    const container =
+        document.getElementById(
+            "statusDonut"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const colors = {
+        "new": "#3f78a0",
+        "review": "#d4a24c",
+        "strong-match": "#8a5cc2",
+        "contact": "#e07b39",
+        "verification": "#2f9e8f",
+        "completed": "#176b59"
+    };
+
+
+    const total =
+        reports.length;
+
+
+    const segments =
+        Object.keys(statusLabels)
+            .map(
+                status => ({
+                    status,
+                    count:
+                        reports.filter(
+                            report =>
+                                report.status === status
+                        ).length
+                })
+            )
+            .filter(
+                segment =>
+                    segment.count > 0
+            );
+
+
+    let offset =
+        0;
+
+
+    const circles =
+        segments.map(
+            segment => {
+
+                const share =
+                    total
+                        ? segment.count / total * 100
+                        : 0;
+
+
+                const circle = `
+                    <circle
+                        cx="21"
+                        cy="21"
+                        r="15.915"
+                        fill="none"
+                        stroke="${colors[segment.status] || "#9aa8a2"}"
+                        stroke-width="6"
+                        stroke-dasharray="${share} ${100 - share}"
+                        stroke-dashoffset="${25 - offset}"
+                    ></circle>
+                `;
+
+
+                offset +=
+                    share;
+
+
+                return circle;
+
+            }
+        ).join("");
+
+
+    container.innerHTML = `
+
+        <div class="donut-wrap">
+
+            <svg
+                viewBox="0 0 42 42"
+                class="donut-svg"
+                role="img"
+                aria-label="توزيع حالات البلاغات"
+            >
+
+                <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="none"
+                    stroke="#eef2ee"
+                    stroke-width="6"
+                ></circle>
+
+                ${circles}
+
+            </svg>
+
+
+            <div class="donut-center">
+                <strong>${total}</strong>
+                <span>بلاغ</span>
+            </div>
+
+        </div>
+
+
+        <ul class="donut-legend">
+
+            ${segments.map(
+                segment => `
+                    <li>
+                        <i style="background:${colors[segment.status] || "#9aa8a2"}"></i>
+                        <span>${escapeHTML(statusLabels[segment.status])}</span>
+                        <strong>${segment.count}</strong>
+                        <small>${percentOf(segment.count, total)}%</small>
+                    </li>
+                `
+            ).join("")}
+
+        </ul>
+
+    `;
+
+}
+
+
+function renderBarList(
+    containerId,
+    items,
+    emptyText = "لا توجد بيانات بعد."
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (
+        items.length === 0
+    ) {
+
+        container.innerHTML =
+            `<p class="analytics-empty">${escapeHTML(emptyText)}</p>`;
+
+        return;
+
+    }
+
+
+    const max =
+        Math.max(
+            1,
+            ...items.map(
+                item =>
+                    item.total
+            )
+        );
+
+
+    container.innerHTML =
+        items.map(
+            item => `
+
+                <div class="bar-row">
+
+                    <div class="bar-row-head">
+
+                        <span>
+                            ${escapeHTML(item.label)}
+                            ${item.note ? `<small>${escapeHTML(item.note)}</small>` : ""}
+                        </span>
+
+                        <strong>${item.total}</strong>
+
+                    </div>
+
+
+                    <div class="bar-track">
+
+                        ${item.segments.map(
+                            segment => `
+                                <span
+                                    class="bar-fill ${segment.className}"
+                                    style="width:${segment.value / max * 100}%"
+                                    title="${escapeHTML(segment.title || "")}"
+                                ></span>
+                            `
+                        ).join("")}
+
+                    </div>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+function groupReportsBy(
+    getKey
+) {
+
+    const groups =
+        new Map();
+
+
+    reports.forEach(
+        report => {
+
+            const key =
+                getKey(report);
+
+
+            if (!key) {
+                return;
+            }
+
+
+            if (
+                !groups.has(key)
+            ) {
+
+                groups.set(
+                    key,
+                    []
+                );
+
+            }
+
+
+            groups
+                .get(key)
+                .push(report);
+
+        }
+    );
+
+
+    return [...groups.entries()]
+        .map(
+            ([key, items]) => ({
+                key,
+                items,
+                lost:
+                    items.filter(
+                        report =>
+                            report.type === "lost"
+                    ).length,
+                found:
+                    items.filter(
+                        report =>
+                            report.type === "found"
+                    ).length
+            })
+        )
+        .sort(
+            (a, b) =>
+                b.items.length -
+                a.items.length
+        );
+
+}
+
+
+function lostFoundSegments(
+    group
+) {
+
+    return [
+        {
+            value: group.lost,
+            className: "lost",
+            title: `${group.lost} فاقد`
+        },
+        {
+            value: group.found,
+            className: "found",
+            title: `${group.found} عاثر`
+        }
+    ];
+
+}
+
+
+function renderCategoryBars() {
+
+    renderBarList(
+        "categoryBars",
+        groupReportsBy(
+            report =>
+                report.category
+        )
+            .slice(0, 6)
+            .map(
+                group => ({
+                    label: group.key,
+                    total: group.items.length,
+                    segments:
+                        lostFoundSegments(group)
+                })
+            )
+    );
+
+}
+
+
+function renderNeighborhoodBars() {
+
+    renderBarList(
+        "neighborhoodBars",
+        groupReportsBy(
+            report =>
+                report.neighborhood
+        )
+            .slice(0, 6)
+            .map(
+                group => ({
+                    label: group.key,
+                    note: group.items[0].region,
+                    total: group.items.length,
+                    segments:
+                        lostFoundSegments(group)
+                })
+            )
+    );
+
+}
+
+
+function renderMatchQualityBars() {
+
+    const buckets = [
+        {
+            label: "تطابق ممتاز",
+            note: "90% فأكثر",
+            className: "quality-excellent",
+            test: score => score >= 90
+        },
+        {
+            label: "تطابق قوي",
+            note: "بين 80 و89%",
+            className: "quality-strong",
+            test: score => score >= 80 && score < 90
+        },
+        {
+            label: "تطابق محتمل",
+            note: "بين 65 و79%",
+            className: "quality-possible",
+            test: score => score >= 65 && score < 80
+        },
+        {
+            label: "تطابق ضعيف",
+            note: "أقل من 65%",
+            className: "quality-weak",
+            test: score => score > 0 && score < 65
+        },
+        {
+            label: "بدون تطابق",
+            note: "",
+            className: "quality-none",
+            test: score => !score
+        }
+    ];
+
+
+    renderBarList(
+        "matchQualityBars",
+        buckets.map(
+            bucket => {
+
+                const count =
+                    reports.filter(
+                        report =>
+                            bucket.test(
+                                Number(report.bestMatch) || 0
+                            )
+                    ).length;
+
+
+                return {
+                    label: bucket.label,
+                    note: bucket.note,
+                    total: count,
+                    segments: [
+                        {
+                            value: count,
+                            className: bucket.className
+                        }
+                    ]
+                };
+
+            }
+        )
+    );
+
+}
+
+
+function renderSplitBar(
+    containerId,
+    parts,
+    footer = ""
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const total =
+        parts.reduce(
+            (sum, part) =>
+                sum + part.value,
+            0
+        );
+
+
+    container.innerHTML = `
+
+        <div class="split-bar">
+
+            ${parts.map(
+                part => `
+                    <span
+                        class="split-fill ${part.className}"
+                        style="flex-grow:${part.value || 0.0001}"
+                    ></span>
+                `
+            ).join("")}
+
+        </div>
+
+
+        <div class="split-legend">
+
+            ${parts.map(
+                part => `
+                    <div>
+                        <span>
+                            <i class="legend-swatch ${part.className}"></i>
+                            ${escapeHTML(part.label)}
+                        </span>
+                        <strong>${percentOf(part.value, total)}%</strong>
+                        <small>${part.value} بلاغ</small>
+                    </div>
+                `
+            ).join("")}
+
+        </div>
+
+
+        ${footer}
+
+    `;
+
+}
+
+
+function renderTypeSplit(
+    lostCount,
+    foundCount
+) {
+
+    const lostOpen =
+        reports.filter(
+            report =>
+                report.type === "lost" &&
+                report.status !== "completed"
+        ).length;
+
+
+    renderSplitBar(
+        "typeSplit",
+        [
+            {
+                label: "فاقد",
+                value: lostCount,
+                className: "lost"
+            },
+            {
+                label: "عاثر",
+                value: foundCount,
+                className: "found"
+            }
+        ],
+        `
+            <p class="chart-footnote">
+                ${lostOpen} بلاغ فاقد لم يُسلَّم بعد
+            </p>
+        `
+    );
+
+}
+
+
+function renderRegionSplit() {
+
+    const groups =
+        groupReportsBy(
+            report =>
+                report.region
+        );
+
+
+    const withGps =
+        reports.filter(
+            report =>
+                report.latitude &&
+                report.longitude
+        ).length;
+
+
+    renderSplitBar(
+        "regionSplit",
+        groups.map(
+            (group, index) => ({
+                label: group.key,
+                value: group.items.length,
+                className: `region-${index % 3}`
+            })
+        ),
+        `
+            <p class="chart-footnote">
+                ${withGps} من ${reports.length} بلاغ بموقع GPS دقيق
+            </p>
+        `
+    );
+
+}
+
+
+function renderRecentReports() {
+
+    const list =
+        document.getElementById(
+            "recentReports"
+        );
+
+
+    if (!list) {
+        return;
+    }
+
+
+    const recent =
+        [...reports]
+            .sort(
+                (a, b) =>
+                    `${b.date} ${b.time || ""}`
+                        .localeCompare(
+                            `${a.date} ${a.time || ""}`
+                        )
+            )
+            .slice(0, 5);
+
+
+    list.innerHTML =
+        recent.map(
+            report => `
+
+                <li>
+
+                    <button
+                        type="button"
+                        class="recent-report"
+                        data-report-id="${report.id}"
+                    >
+
+                        <span
+                            class="
+                                report-type-badge
+                                ${report.type}
+                            "
+                        >
+                            ${report.type === "lost" ? "فاقد" : "عاثر"}
+                        </span>
+
+
+                        <span class="recent-report-text">
+
+                            <strong>
+                                ${escapeHTML(report.itemType)}
+                                -
+                                ${escapeHTML(report.primaryColor || "")}
+                            </strong>
+
+                            <small>
+                                #${report.id}
+                                ·
+                                ${escapeHTML(report.neighborhood || report.region || "")}
+                                ·
+                                ${formatDate(report.date)}
+                            </small>
+
+                        </span>
+
+
+                        <span
+                            class="
+                                status-badge
+                                status-${escapeHTML(report.status)}
+                            "
+                        >
+                            ${escapeHTML(statusLabels[report.status] || report.status)}
+                        </span>
+
+                    </button>
+
+                </li>
+
+            `
+        ).join("");
+
+
+    list
+        .querySelectorAll(
+            ".recent-report"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () =>
+                        openReportDetails(
+                            Number(
+                                button.dataset.reportId
+                            )
+                        )
+                );
+
+            }
+        );
 
 }
 
