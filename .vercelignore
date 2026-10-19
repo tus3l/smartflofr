@@ -1,0 +1,4 @@
+# Vercel serves this project as a static site and cannot run PHP.
+# Keep the PHP backend (including database config) from being published as plain text.
+backend/
+uploads/
