@@ -20,7 +20,7 @@
 
 
 <body class="admin-page">
-    <script src="../js/loader.js?v=20261104-1"></script>
+    <script src="../js/loader.js?v=20261104-2"></script>
     <link rel="stylesheet" href="../css/main.css?v=20261001-2">
     <link
         rel="stylesheet"
@@ -28,8 +28,9 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""
     >
-    <link rel="stylesheet" href="../css/admin-dashboard.css?v=20261019-4">
+    <link rel="stylesheet" href="../css/admin-dashboard.css?v=20261104-1">
     <link rel="stylesheet" href="../css/ui-theme.css?v=20261019-1">
+    <link rel="stylesheet" href="../css/notifications.css?v=20261104-1">
 
 
 <!-- =========================
@@ -228,12 +229,16 @@
 
             <button
                 type="button"
-                class="header-action-button notification-admin-button" aria-label="التنبيهات"
+                class="header-action-button notification-admin-button"
+                id="notificationButton"
+                aria-label="عرض التنبيهات"
+                aria-controls="notificationPanel"
+                aria-expanded="false"
             >
                 🔔
 
-                <span>
-                    3
+                <span class="notification-count" id="notificationCount" aria-hidden="true">
+                    0
                 </span>
             </button>
 
@@ -244,6 +249,8 @@
 
 
     <main class="admin-content">
+
+        <div class="admin-load-error" id="adminLoadError" role="alert" hidden></div>
 
 
         <!-- =========================
@@ -983,6 +990,41 @@
 
 
 
+<div
+    class="notification-panel"
+    id="notificationPanel"
+    role="dialog"
+    aria-labelledby="notificationPanelTitle"
+    aria-hidden="true"
+    inert
+>
+    <div class="notification-panel-header">
+        <strong id="notificationPanelTitle">التنبيهات</strong>
+        <button id="closeNotifications" type="button" aria-label="إغلاق التنبيهات">×</button>
+    </div>
+    <div class="notification-toolbar">
+        <span id="notificationSummary" aria-live="polite">جاري تحميل التنبيهات...</span>
+        <button type="button" id="markAllNotifications" hidden>تحديد الكل كمقروء</button>
+    </div>
+    <div class="notification-content">
+        <div class="notification-error" id="notificationError" role="alert" hidden>
+            <span id="notificationErrorMessage"></span>
+            <button type="button" id="retryNotifications">إعادة المحاولة</button>
+        </div>
+        <p class="notification-loading" id="notificationLoading">جاري تحميل التنبيهات...</p>
+        <div class="empty-notifications" id="emptyNotifications" hidden>
+            🔔
+            <strong>لا توجد تنبيهات حالياً</strong>
+            <span>سنخبرك هنا عند وجود تحديث على بلاغك.</span>
+        </div>
+        <ul class="notification-list" id="notificationList" aria-label="قائمة التنبيهات"></ul>
+        <div class="notification-pagination">
+            <button type="button" id="newerNotifications" hidden>العودة للأحدث</button>
+            <button type="button" id="olderNotifications" hidden>عرض الأقدم</button>
+        </div>
+    </div>
+</div>
+
 <!-- TOAST -->
 
 <div
@@ -997,7 +1039,8 @@
     crossorigin=""
 ></script>
 
-<script src="../js/admin-dashboard.js?v=20261019-6"></script>
+<script src="../js/admin-dashboard.js?v=20261104-1"></script>
+<script src="../js/notifications.js?v=20261104-1"></script>
 
 </body>
 </html>

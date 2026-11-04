@@ -413,6 +413,17 @@ textarea {
     padding: 22px;
 }
 
+.admin-load-error:not([hidden]),
+.report-update-error:not([hidden]) {
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid #e8c1be;
+    border-radius: 10px;
+    background: #fff5f4;
+    color: #9c3934;
+    font-size: 13px;
+}
+
 
 /* =========================================================
    STATS

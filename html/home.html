@@ -34,10 +34,11 @@
 
 
 <body class="home-page">
-    <script src="../js/loader.js?v=20261104-1"></script>
+    <script src="../js/loader.js?v=20261104-2"></script>
     <link rel="stylesheet" href="../css/main.css?v=20261001-2">
     <link rel="stylesheet" href="../css/home.css?v=20261001-4">
     <link rel="stylesheet" href="../css/ui-theme.css?v=20261019-1">
+    <link rel="stylesheet" href="../css/notifications.css?v=20261104-1">
 
     <header class="topbar">
 
@@ -64,6 +65,8 @@
                     id="notificationButton"
                     type="button"
                     aria-label="عرض التنبيهات"
+                    aria-controls="notificationPanel"
+                    aria-expanded="false"
                 >
 
                     🔔
@@ -71,6 +74,7 @@
                     <span
                         class="notification-count"
                         id="notificationCount"
+                        aria-hidden="true"
                     >
                         0
                     </span>
@@ -378,12 +382,15 @@
     <div
         class="notification-panel"
         id="notificationPanel"
-        aria-label="التنبيهات"
+        role="dialog"
+        aria-labelledby="notificationPanelTitle"
+        aria-hidden="true"
+        inert
     >
 
         <div class="notification-panel-header">
 
-            <strong>
+            <strong id="notificationPanelTitle">
                 التنبيهات
             </strong>
 
@@ -397,24 +404,46 @@
 
         </div>
 
-        <div class="empty-notifications">
+        <div class="notification-toolbar">
+            <span id="notificationSummary" aria-live="polite">جاري تحميل التنبيهات...</span>
+            <button type="button" id="markAllNotifications" hidden>تحديد الكل كمقروء</button>
+        </div>
 
-            🔔
+        <div class="notification-content">
+            <div class="notification-error" id="notificationError" role="alert" hidden>
+                <span id="notificationErrorMessage"></span>
+                <button type="button" id="retryNotifications">إعادة المحاولة</button>
+            </div>
 
-            <strong>
-                لا توجد تنبيهات حالياً
-            </strong>
+            <p class="notification-loading" id="notificationLoading">جاري تحميل التنبيهات...</p>
 
-            <span>
-                سنخبرك هنا عند وجود تحديث على بلاغك.
-            </span>
+            <div class="empty-notifications" id="emptyNotifications" hidden>
 
+                🔔
+
+                <strong>
+                    لا توجد تنبيهات حالياً
+                </strong>
+
+                <span>
+                    سنخبرك هنا عند وجود تحديث على بلاغك.
+                </span>
+
+            </div>
+
+            <ul class="notification-list" id="notificationList" aria-label="قائمة التنبيهات"></ul>
+
+            <div class="notification-pagination">
+                <button type="button" id="newerNotifications" hidden>العودة للأحدث</button>
+                <button type="button" id="olderNotifications" hidden>عرض الأقدم</button>
+            </div>
         </div>
 
     </div>
 
 
     <script src="../js/session.js?v=20261104-1"></script>
-    <script src="../js/home.js?v=20261104-1"></script>
+    <script src="../js/home.js?v=20261104-2"></script>
+    <script src="../js/notifications.js?v=20261104-1"></script>
 </body>
 </html>

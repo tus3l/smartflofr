@@ -1,0 +1,106 @@
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../backend/config/database.php';
+require_once __DIR__ . '/../backend/core/report-status.php';
+
+
+function assertTest(bool $condition, string $message): void
+{
+    if (!$condition) {
+        throw new RuntimeException($message);
+    }
+}
+
+
+function changeStatus(PDO $pdo, string $type, int $id, string $status): ?array
+{
+    $pdo->beginTransaction();
+    try {
+        $result = updateReportStatus($pdo, $type, $id, $status);
+        $pdo->commit();
+        return $result;
+    } catch (Throwable $error) {
+        $pdo->rollBack();
+        throw $error;
+    }
+}
+
+
+try {
+    $pdo = (new Database())->connect();
+    $pdo->exec(
+        'CREATE TEMPORARY TABLE lost_items (
+            id BIGINT UNSIGNED PRIMARY KEY,
+            user_id BIGINT UNSIGNED NOT NULL,
+            admin_status VARCHAR(30) NOT NULL
+        ) ENGINE=InnoDB'
+    );
+    $pdo->exec(
+        'CREATE TEMPORARY TABLE found_items (
+            id BIGINT UNSIGNED PRIMARY KEY,
+            user_id BIGINT UNSIGNED NOT NULL,
+            admin_status VARCHAR(30) NOT NULL
+        ) ENGINE=InnoDB'
+    );
+    $pdo->exec(
+        'CREATE TEMPORARY TABLE notifications (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id BIGINT UNSIGNED NOT NULL,
+            type VARCHAR(30) NOT NULL,
+            title VARCHAR(200) NOT NULL,
+            message TEXT NOT NULL,
+            reference_type VARCHAR(30) NOT NULL,
+            reference_id BIGINT UNSIGNED NOT NULL,
+            CHECK (user_id <> 99)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
+    );
+    $pdo->exec("INSERT INTO lost_items VALUES (1, 101, 'new'), (2, 99, 'new')");
+    $pdo->exec("INSERT INTO found_items VALUES (1, 102, 'new')");
+
+    $result = changeStatus($pdo, 'lost', 1, 'review');
+    assertTest($result === ['status' => 'review', 'changed' => true], 'Lost status did not change.');
+    $notice = $pdo->query('SELECT * FROM notifications WHERE id = 1')->fetch();
+    assertTest((int)$notice['user_id'] === 101, 'Lost notification has the wrong owner.');
+    assertTest($notice['reference_type'] === 'lost_item' && (int)$notice['reference_id'] === 1, 'Lost reference is incorrect.');
+    assertTest(strpos($notice['message'], 'قيد المراجعة') !== false, 'Notification has the wrong status label.');
+
+    $result = changeStatus($pdo, 'lost', 1, 'review');
+    assertTest($result['changed'] === false, 'An unchanged status was treated as a change.');
+    assertTest((int)$pdo->query('SELECT COUNT(*) FROM notifications')->fetchColumn() === 1, 'An unchanged status created a notification.');
+
+    $result = changeStatus($pdo, 'found', 1, 'completed');
+    assertTest($result['changed'] === true, 'Found status did not change.');
+    $notice = $pdo->query('SELECT * FROM notifications WHERE user_id = 102')->fetch();
+    assertTest($notice['reference_type'] === 'found_item' && (int)$notice['reference_id'] === 1, 'Found notification was sent to the wrong report.');
+    assertTest($pdo->query('SELECT admin_status FROM lost_items WHERE id = 1')->fetchColumn() === 'review', 'Overlapping report IDs changed the wrong table.');
+
+    assertTest(changeStatus($pdo, 'lost', 999, 'review') === null, 'A missing report was accepted.');
+
+    try {
+        changeStatus($pdo, 'lost', 2, 'verification');
+        throw new RuntimeException('Notification failure did not fail the update.');
+    } catch (PDOException $error) {
+        assertTest($pdo->query('SELECT admin_status FROM lost_items WHERE id = 2')->fetchColumn() === 'new', 'The status was not rolled back when notification creation failed.');
+    }
+
+    try {
+        changeStatus($pdo, 'lost', 1, 'invalid');
+        throw new RuntimeException('An invalid status was accepted.');
+    } catch (InvalidArgumentException $error) {
+        assertTest(true, 'Invalid status was rejected.');
+    }
+
+    try {
+        updateReportStatus($pdo, 'lost', 1, 'new');
+        throw new RuntimeException('An update without a transaction was accepted.');
+    } catch (LogicException $error) {
+        assertTest(true, 'An update without a transaction was rejected.');
+    }
+
+    echo "Report notification transaction tests passed.\n";
+} catch (Throwable $error) {
+    fwrite(STDERR, 'Report notification tests failed: ' . $error->getMessage() . PHP_EOL);
+    exit(1);
+}

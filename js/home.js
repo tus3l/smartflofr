@@ -6,7 +6,6 @@ const userWelcomeName =
         "userWelcomeName"
     );
 
-
 const savedName =
     sessionStorage.getItem(
         "smartLostFoundUserName"
@@ -167,40 +166,6 @@ document
 
 
 /* ==============================
-   التنبيهات
-============================== */
-
-const notificationButton =
-    document.getElementById(
-        "notificationButton"
-    );
-
-
-const notificationPanel =
-    document.getElementById(
-        "notificationPanel"
-    );
-
-
-const closeNotifications =
-    document.getElementById(
-        "closeNotifications"
-    );
-
-
-notificationButton.addEventListener(
-    "click",
-    () => {
-
-        notificationPanel.classList.add(
-            "open"
-        );
-
-    }
-);
-
-
-/* ==============================
    تسجيل الخروج
 ============================== */
 
@@ -265,18 +230,6 @@ logoutButton.addEventListener(
             logoutButton.disabled = false;
 
         }
-
-    }
-);
-
-
-closeNotifications.addEventListener(
-    "click",
-    () => {
-
-        notificationPanel.classList.remove(
-            "open"
-        );
 
     }
 );

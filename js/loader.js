@@ -392,7 +392,8 @@
         const source = target instanceof HTMLImageElement && target.loading !== "lazy"
             ? target.currentSrc || target.src
             : target instanceof HTMLScriptElement ? target.src
-            : target instanceof HTMLLinkElement && target.relList.contains("stylesheet") ? target.href
+            // A loaded stylesheet whose external @import failed still has a sheet; keep it.
+            : target instanceof HTMLLinkElement && target.relList.contains("stylesheet") && !target.sheet ? target.href
             : null;
         if (!pageLoaded && source && new URL(source).origin === location.origin) {
             failedResources.add(source);

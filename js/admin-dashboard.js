@@ -1,560 +1,7 @@
 "use strict";
 
 
-/* ======================================================
-   DEMO DATA
-
-   لاحقاً سيتم استبدال هذه البيانات بطلب API من MySQL.
-====================================================== */
-
-const reports = [
-
-    {
-        id: 208,
-
-        type: "found",
-
-        userName: "عباده الجهني",
-
-        phone: "0501234567",
-
-        email: "obadah@example.com",
-
-        category: "إلكترونيات",
-
-        itemType: "جوال",
-
-        brand: "Apple",
-
-        model: "غير معروف",
-
-        primaryColor: "أسود",
-
-        secondaryColor: "لا يوجد",
-
-        description:
-            "جوال أسود عليه كفر شفاف وفي الزاوية خدش بسيط.",
-
-        distinctiveMarks:
-            "يوجد كسر صغير جداً قريب من الكاميرا.",
-
-        region: "ينبع البحر",
-
-        neighborhood: "حي البندر",
-
-        latitude: "24.0891234",
-
-        longitude: "38.0618452",
-
-        accuracy: 7,
-
-        locationDescription:
-            "مواقف بالقرب من أحد المحلات.",
-
-        date: "2026-09-27",
-
-        time: "08:40",
-
-        status: "strong-match",
-
-        bestMatch: 96,
-
-        adminNote: "",
-
-        matches: [
-
-            {
-                reportId: 184,
-
-                name: "محمد عبدالله",
-
-                title:
-                    "iPhone 16 Pro Max أسود",
-
-                region:
-                    "ينبع البحر - حي البندر",
-
-                date:
-                    "2026-09-25",
-
-                score: 96,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 100,
-                    color: 100,
-                    location: 95,
-                    date: 90,
-                    description: 88,
-                    image: 92
-                }
-            },
-
-            {
-                reportId: 177,
-
-                name: "خالد الجهني",
-
-                title:
-                    "iPhone 15 Pro أسود",
-
-                region:
-                    "ينبع البحر - حي الصريف",
-
-                date:
-                    "2026-09-26",
-
-                score: 83,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 100,
-                    color: 100,
-                    location: 72,
-                    date: 94,
-                    description: 79,
-                    image: 71
-                }
-            },
-
-            {
-                reportId: 163,
-
-                name: "سعد الحربي",
-
-                title:
-                    "جوال Apple أسود",
-
-                region:
-                    "ينبع الصناعية",
-
-                date:
-                    "2026-09-25",
-
-                score: 71,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 100,
-                    color: 100,
-                    location: 31,
-                    date: 85,
-                    description: 65,
-                    image: 55
-                }
-            }
-
-        ]
-    },
-
-
-    {
-        id: 207,
-
-        type: "lost",
-
-        userName: "محمد عبدالله",
-
-        phone: "0551112233",
-
-        email: "mohammed@example.com",
-
-        category: "إلكترونيات",
-
-        itemType: "جوال",
-
-        brand: "Apple",
-
-        model: "iPhone 16 Pro Max",
-
-        primaryColor: "أسود",
-
-        secondaryColor: "لا يوجد",
-
-        description:
-            "ايفون أسود كفر شفاف، يوجد خدش بسيط.",
-
-        distinctiveMarks:
-            "كسر صغير بجانب عدسة الكاميرا.",
-
-        region: "ينبع البحر",
-
-        neighborhood: "حي البندر",
-
-        latitude: "24.0894000",
-
-        longitude: "38.0621000",
-
-        accuracy: 12,
-
-        locationDescription:
-            "قرب مواقف المحلات.",
-
-        date: "2026-09-25",
-
-        time: "20:20",
-
-        status: "contact",
-
-        bestMatch: 96,
-
-        adminNote:
-            "التطابق مع البلاغ 208 قوي جداً.",
-
-        matches: [
-
-            {
-                reportId: 208,
-
-                name: "عباده الجهني",
-
-                title:
-                    "جوال Apple أسود معثور عليه",
-
-                region:
-                    "ينبع البحر - حي البندر",
-
-                date:
-                    "2026-09-27",
-
-                score: 96,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 100,
-                    color: 100,
-                    location: 95,
-                    date: 90,
-                    description: 88,
-                    image: 92
-                }
-            }
-
-        ]
-    },
-
-
-    {
-        id: 206,
-
-        type: "lost",
-
-        userName: "أحمد الحربي",
-
-        phone: "0569001122",
-
-        email: "",
-
-        category: "حيوانات",
-
-        itemType: "طائر",
-
-        brand: "بادجي",
-
-        model: "غير محدد",
-
-        primaryColor: "أزرق",
-
-        secondaryColor: "أبيض",
-
-        description:
-            "بادجي أزرق وأبيض صغير ومتعود على الناس.",
-
-        distinctiveMarks:
-            "حلقة صغيرة في الرجل.",
-
-        region: "ينبع الصناعية",
-
-        neighborhood: "حي الفيصل",
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null,
-
-        locationDescription:
-            "قرب المنزل.",
-
-        date: "2026-09-26",
-
-        time: "16:00",
-
-        status: "new",
-
-        bestMatch: 88,
-
-        adminNote: "",
-
-        matches: [
-
-            {
-                reportId: 199,
-
-                name: "ناصر الشريف",
-
-                title:
-                    "طائر بادجي أزرق معثور",
-
-                region:
-                    "ينبع الصناعية",
-
-                date:
-                    "2026-09-26",
-
-                score: 88,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 100,
-                    color: 92,
-                    location: 88,
-                    date: 100,
-                    description: 80,
-                    image: 75
-                }
-            }
-
-        ]
-    },
-
-
-    {
-        id: 205,
-
-        type: "found",
-
-        userName: "فهد العتيبي",
-
-        phone: "0532221188",
-
-        email: "",
-
-        category: "مفاتيح",
-
-        itemType: "مفتاح سيارة",
-
-        brand: "Toyota",
-
-        model: "غير معروف",
-
-        primaryColor: "أسود",
-
-        secondaryColor: "فضي",
-
-        description:
-            "مفتاح سيارة مع تعليقة سوداء.",
-
-        distinctiveMarks:
-            "يوجد خدش على التعليقة.",
-
-        region: "ينبع البحر",
-
-        neighborhood: "حي الصريف",
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null,
-
-        locationDescription:
-            "قرب ممشى الحي.",
-
-        date: "2026-09-27",
-
-        time: "06:40",
-
-        status: "review",
-
-        bestMatch: 64,
-
-        adminNote: "",
-
-        matches: [
-
-            {
-                reportId: 191,
-
-                name: "عبدالله سالم",
-
-                title:
-                    "مفتاح تويوتا",
-
-                region:
-                    "ينبع البحر",
-
-                date:
-                    "2026-09-24",
-
-                score: 64,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 80,
-                    color: 90,
-                    location: 64,
-                    date: 58,
-                    description: 50,
-                    image: 0
-                }
-            }
-
-        ]
-    },
-
-
-    {
-        id: 204,
-
-        type: "lost",
-
-        userName: "سارة محمد",
-
-        phone: "0540007788",
-
-        email: "sara@example.com",
-
-        category: "محافظ وحقائب",
-
-        itemType: "محفظة",
-
-        brand: "غير محدد",
-
-        model: "غير محدد",
-
-        primaryColor: "بني",
-
-        secondaryColor: "ذهبي",
-
-        description:
-            "محفظة جلدية صغيرة بنية.",
-
-        distinctiveMarks:
-            "يوجد حرف S صغير داخلها.",
-
-        region: "ينبع البحر",
-
-        neighborhood: "حي الشاطئ",
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null,
-
-        locationDescription:
-            "قرب أحد المقاهي.",
-
-        date: "2026-09-24",
-
-        time: "21:30",
-
-        status: "verification",
-
-        bestMatch: 91,
-
-        adminNote:
-            "تم التواصل مع الطرفين.",
-
-        matches: [
-
-            {
-                reportId: 194,
-
-                name: "ريم الجهني",
-
-                title:
-                    "محفظة بنية معثور عليها",
-
-                region:
-                    "ينبع البحر - حي الشاطئ",
-
-                date:
-                    "2026-09-25",
-
-                score: 91,
-
-                analysis: {
-                    category: 100,
-                    type: 100,
-                    brand: 50,
-                    color: 100,
-                    location: 96,
-                    date: 96,
-                    description: 91,
-                    image: 87
-                }
-            }
-
-        ]
-    },
-
-
-    {
-        id: 203,
-
-        type: "found",
-
-        userName: "راشد الجهني",
-
-        phone: "0508899221",
-
-        email: "",
-
-        category: "أوراق ومستندات",
-
-        itemType: "بطاقة بنكية",
-
-        brand: "غير محدد",
-
-        model: "غير محدد",
-
-        primaryColor: "أزرق",
-
-        secondaryColor: null,
-
-        description:
-            "بطاقة بنكية تم العثور عليها.",
-
-        distinctiveMarks:
-            "المعلومات مخفية عن العامة.",
-
-        region: "ينبع الصناعية",
-
-        neighborhood: "حي خالد",
-
-        latitude: null,
-
-        longitude: null,
-
-        accuracy: null,
-
-        locationDescription:
-            "بالقرب من متجر.",
-
-        date: "2026-09-25",
-
-        time: "14:10",
-
-        status: "completed",
-
-        bestMatch: 99,
-
-        adminNote:
-            "تم التسليم لصاحب البطاقة.",
-
-        matches: []
-
-    }
-
-];
+const reports = [];
 
 
 /* ======================================================
@@ -595,7 +42,10 @@ const statusLabels = {
         "جاري التحقق",
 
     "completed":
-        "تم التسليم"
+        "تم التسليم",
+
+    "rejected":
+        "مرفوض"
 
 };
 
@@ -670,7 +120,57 @@ const lostItemMarkers = new Map();
    INITIALIZE
 ====================================================== */
 
-renderDashboard();
+let reportsRequest = null;
+
+
+void loadReports();
+
+
+async function loadReports(announce = false) {
+    if (reportsRequest) return reportsRequest;
+
+    const task = (async () => {
+        const errorBox = document.getElementById("adminLoadError");
+        try {
+            const { response, data } = await SFLoader.request(
+                "../backend/api/admin/reports.php",
+                { credentials: "include", cache: "no-store" }
+            );
+
+            if (response.status === 401) {
+                void SFLoader.navigate("login.html", { replace: true });
+                return false;
+            }
+            if (response.status === 403) {
+                void SFLoader.navigate("home.html", { replace: true });
+                return false;
+            }
+            if (!response.ok || !data.success || !Array.isArray(data.reports)) {
+                throw new Error(data.message || "تعذر تحميل البلاغات.");
+            }
+
+            reports.splice(0, reports.length, ...data.reports);
+            errorBox.hidden = true;
+            renderDashboard();
+            if (announce) showToast("تم تحديث البيانات.");
+            return true;
+        } catch (error) {
+            console.error("Unable to load admin reports:", error);
+            errorBox.textContent = error instanceof Error
+                ? `${error.message} استخدم زر التحديث للمحاولة مجددًا.`
+                : "تعذر تحميل البلاغات. استخدم زر التحديث للمحاولة مجددًا.";
+            errorBox.hidden = false;
+            return false;
+        }
+    })();
+
+    reportsRequest = task;
+    try {
+        return await task;
+    } finally {
+        if (reportsRequest === task) reportsRequest = null;
+    }
+}
 
 
 /* ======================================================
@@ -891,7 +391,7 @@ function renderTopMatches() {
 
                     <article
                         class="top-match-card"
-                        data-report-id="${report.id}"
+                        data-report-key="${report.key}"
                     >
 
                         <div class="match-card-top">
@@ -951,9 +451,7 @@ function renderTopMatches() {
                     () => {
 
                         openReportDetails(
-                            Number(
-                                card.dataset.reportId
-                            )
+                            card.dataset.reportKey
                         );
 
                     }
@@ -1204,7 +702,7 @@ function renderDesktopReports(
                         <button
                             type="button"
                             class="open-report-button"
-                            data-report-id="${report.id}"
+                            data-report-key="${report.key}"
                         >
                             فتح
                         </button>
@@ -1229,9 +727,7 @@ function renderDesktopReports(
                     () => {
 
                         openReportDetails(
-                            Number(
-                                button.dataset.reportId
-                            )
+                            button.dataset.reportKey
                         );
 
                     }
@@ -1283,7 +779,7 @@ function renderMobileReports(
 
                 <article
                     class="mobile-report-card"
-                    data-report-id="${report.id}"
+                    data-report-key="${report.key}"
                 >
 
                     <div class="mobile-report-top">
@@ -1353,9 +849,7 @@ function renderMobileReports(
                     () => {
 
                         openReportDetails(
-                            Number(
-                                card.dataset.reportId
-                            )
+                            card.dataset.reportKey
                         );
 
                     }
@@ -1418,14 +912,14 @@ function renderMatchScore(
 ====================================================== */
 
 function openReportDetails(
-    reportId
+    reportKey
 ) {
 
     const report =
         reports.find(
             item =>
-                item.id ===
-                reportId
+                item.key ===
+                reportKey
         );
 
 
@@ -1463,6 +957,8 @@ function openReportDetails(
 
 
     detailsBody.innerHTML = `
+
+        <div class="report-update-error" id="reportUpdateError" role="alert" hidden></div>
 
         ${renderSmartMatchesSection(report)}
 
@@ -1659,7 +1155,7 @@ function renderSmartMatchesSection(
                             <button
                                 type="button"
                                 class="match-open-button"
-                                data-match-report="${match.reportId}"
+                                data-match-report="${match.reportKey}"
                             >
                                 فتح البلاغ المطابق
                             </button>
@@ -1763,6 +1259,7 @@ function renderOwnerSection(
                     type="button"
                     class="contact-button call-button"
                     id="callUserButton"
+                    ${report.phone ? "" : "disabled"}
                 >
                     📞 اتصال
                 </button>
@@ -1772,6 +1269,7 @@ function renderOwnerSection(
                     type="button"
                     class="contact-button whatsapp-button"
                     id="whatsappUserButton"
+                    ${report.phone ? "" : "disabled"}
                 >
                     💬 واتساب
                 </button>
@@ -2088,6 +1586,7 @@ function renderAdminNotesSection(
             <textarea
                 class="admin-note-area"
                 id="adminNoteArea"
+                maxlength="5000"
                 placeholder="اكتب ملاحظة داخلية لا يراها المستخدم..."
             >${escapeHTML(report.adminNote || "")}</textarea>
 
@@ -2111,6 +1610,82 @@ function renderAdminNotesSection(
    BIND DETAILS
 ====================================================== */
 
+let reportUpdatePending = false;
+
+
+async function saveReportChange(report, action, values) {
+    if (reportUpdatePending) return;
+    reportUpdatePending = true;
+    document.querySelectorAll(".status-action, #saveAdminNoteButton")
+        .forEach(button => { button.disabled = true; });
+    const previousError = document.getElementById("reportUpdateError");
+    if (previousError) previousError.hidden = true;
+
+    try {
+        const { response, data } = await SFLoader.request(
+            "../backend/api/admin/update-report.php",
+            {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    type: report.type,
+                    id: report.id,
+                    action,
+                    ...values
+                })
+            }
+        );
+
+        if (response.status === 401) {
+            void SFLoader.navigate("login.html", { replace: true });
+            return;
+        }
+        if (response.status === 403) {
+            void SFLoader.navigate("home.html", { replace: true });
+            return;
+        }
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "تعذر حفظ تحديث البلاغ.");
+        }
+
+        if (action === "status") {
+            if (!Object.hasOwn(statusLabels, data.status)) {
+                throw new Error("استجابة حالة البلاغ غير صحيحة.");
+            }
+            report.status = data.status;
+            renderDashboard();
+            openReportDetails(report.key);
+            showToast(data.changed
+                ? `تم تغيير حالة البلاغ إلى: ${statusLabels[data.status]}`
+                : "حالة البلاغ لم تتغير.");
+        } else {
+            if (typeof data.note !== "string") {
+                throw new Error("استجابة الملاحظة غير صحيحة.");
+            }
+            report.adminNote = data.note;
+            showToast("تم حفظ الملاحظة.");
+        }
+    } catch (error) {
+        console.error("Unable to update report:", error);
+        if (error instanceof SFLoader.ConnectionError && await loadReports()) {
+            openReportDetails(report.key);
+        }
+        const errorBox = document.getElementById("reportUpdateError");
+        if (errorBox) {
+            errorBox.textContent = error instanceof Error
+                ? error.message
+                : "تعذر حفظ تحديث البلاغ.";
+            errorBox.hidden = false;
+        }
+    } finally {
+        reportUpdatePending = false;
+        document.querySelectorAll(".status-action, #saveAdminNoteButton")
+            .forEach(button => { button.disabled = false; });
+    }
+}
+
+
 function bindReportDetailActions(
     report
 ) {
@@ -2121,14 +1696,14 @@ function bindReportDetailActions(
         );
 
 
-    if (callButton) {
+    if (callButton && report.phone) {
 
         callButton.addEventListener(
             "click",
             () => {
 
                 window.location.href =
-                    `tel:${report.phone}`;
+                    `tel:${normalizeSaudiPhone(report.phone)}`;
 
             }
         );
@@ -2142,7 +1717,7 @@ function bindReportDetailActions(
         );
 
 
-    if (whatsappButton) {
+    if (whatsappButton && report.phone) {
 
         whatsappButton.addEventListener(
             "click",
@@ -2177,25 +1752,11 @@ function bindReportDetailActions(
                     "click",
                     () => {
 
-                        report.status =
-                            button.dataset.status;
-
-
-                        showToast(
-                            `تم تغيير حالة البلاغ إلى: ${
-                                statusLabels[
-                                    report.status
-                                ]
-                            }`
+                        void saveReportChange(
+                            report,
+                            "status",
+                            { status: button.dataset.status }
                         );
-
-
-                        openReportDetails(
-                            report.id
-                        );
-
-
-                        renderDashboard();
 
                     }
                 );
@@ -2216,17 +1777,12 @@ function bindReportDetailActions(
             "click",
             () => {
 
-                report.adminNote =
-                    document
-                        .getElementById(
-                            "adminNoteArea"
-                        )
-                        .value
-                        .trim();
-
-
-                showToast(
-                    "تم حفظ الملاحظة."
+                void saveReportChange(
+                    report,
+                    "note",
+                    {
+                        note: document.getElementById("adminNoteArea").value.trim()
+                    }
                 );
 
             }
@@ -2247,15 +1803,13 @@ function bindReportDetailActions(
                     () => {
 
                         const targetId =
-                            Number(
-                                button.dataset.matchReport
-                            );
+                            button.dataset.matchReport;
 
 
                         const exists =
                             reports.some(
                                 item =>
-                                    item.id ===
+                                    item.key ===
                                     targetId
                             );
 
@@ -2269,7 +1823,7 @@ function bindReportDetailActions(
                         } else {
 
                             showToast(
-                                "البلاغ المطابق تجريبي وغير موجود في القائمة الحالية."
+                                "البلاغ المطابق غير موجود في القائمة الحالية."
                             );
 
                         }
@@ -2617,12 +2171,7 @@ document
         "click",
         () => {
 
-            renderDashboard();
-
-
-            showToast(
-                "تم تحديث البيانات."
-            );
+            void loadReports(true);
 
         }
     );
@@ -2826,9 +2375,7 @@ function initLostItemsMap() {
                     lostItemsMap.closePopup();
 
                     openReportDetails(
-                        Number(
-                            button.dataset.reportId
-                        )
+                        button.dataset.reportKey
                     );
 
                 }
@@ -3023,7 +2570,7 @@ function renderLostItemPopup(
             <button
                 type="button"
                 class="lost-popup-button"
-                data-report-id="${report.id}"
+                data-report-key="${report.key}"
             >
                 عرض التفاصيل الكاملة
             </button>
@@ -3147,7 +2694,7 @@ function renderLostItemsMap() {
 
 
             lostItemMarkers.set(
-                report.id,
+                report.key,
                 marker
             );
 
@@ -3231,7 +2778,7 @@ function renderLostMapList(
                     <button
                         type="button"
                         class="lost-map-list-item"
-                        data-report-id="${report.id}"
+                        data-report-key="${report.key}"
                         ${position ? "" : "data-unmapped=\"true\""}
                     >
 
@@ -3286,9 +2833,7 @@ function renderLostMapList(
                     () => {
 
                         const reportId =
-                            Number(
-                                button.dataset.reportId
-                            );
+                            button.dataset.reportKey;
 
 
                         const marker =
@@ -4308,7 +3853,7 @@ function renderRecentReports() {
                     <button
                         type="button"
                         class="recent-report"
-                        data-report-id="${report.id}"
+                        data-report-key="${report.key}"
                     >
 
                         <span
@@ -4368,9 +3913,7 @@ function renderRecentReports() {
                     "click",
                     () =>
                         openReportDetails(
-                            Number(
-                                button.dataset.reportId
-                            )
+                            button.dataset.reportKey
                         )
                 );
 
@@ -4398,7 +3941,7 @@ function analysisBox(
             </span>
 
             <strong>
-                ${value ?? 0}%
+                ${value === null || value === undefined ? "—" : `${value}%`}
             </strong>
 
         </div>
