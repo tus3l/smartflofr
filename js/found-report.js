@@ -2563,8 +2563,8 @@ document
 
             try {
 
-                const response =
-                    await fetch(
+                const { response, data } =
+                    await SFLoader.request(
                         "../backend/api/reports/create-found.php",
                         {
                             method:
@@ -2577,10 +2577,6 @@ document
                                 formData
                         }
                     );
-
-
-                const data =
-                    await response.json();
 
 
                 if (
@@ -2605,8 +2601,9 @@ document
                 setTimeout(
                     () => {
 
-                        window.location.href =
-                            "home.html?v=20261006-3";
+                        void SFLoader.navigate(
+                            "home.html?v=20261006-3"
+                        );
 
                     },
                     1500
@@ -2621,7 +2618,9 @@ document
 
 
                 showToast(
-                    "تعذر الاتصال بالسيرفر."
+                    error instanceof SFLoader.ConnectionError
+                        ? error.message
+                        : "تعذر الاتصال بالسيرفر."
                 );
 
 
@@ -2651,8 +2650,9 @@ document
         "click",
         () => {
 
-            window.location.href =
-                "home.html?v=20261006-3";
+            void SFLoader.navigate(
+                "home.html?v=20261006-3"
+            );
 
         }
     );

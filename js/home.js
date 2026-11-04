@@ -40,8 +40,9 @@ document
              window.location.href = "lost-report.html?v=20261006-3";
             */
 
-          window.location.href =
-    "lost-report.html?v=20261006-3";
+            void SFLoader.navigate(
+                "lost-report.html?v=20261006-3"
+            );
 
         }
     );
@@ -62,8 +63,9 @@ document
              window.location.href = "found-report.html?v=20261006-3";
             */
 
- window.location.href =
-     "found-report.html?v=20261006-3";
+            void SFLoader.navigate(
+                "found-report.html?v=20261006-3"
+            );
 
         }
     );
@@ -216,18 +218,14 @@ logoutButton.addEventListener(
 
         try {
 
-            const response =
-                await fetch(
+            const { response, data: result } =
+                await SFLoader.request(
                     "../backend/api/auth/logout.php",
                     {
                         method: "POST",
                         credentials: "include"
                     }
                 );
-
-
-            const result =
-                await response.json();
 
 
             if (
@@ -247,8 +245,9 @@ logoutButton.addEventListener(
                 "smartLostFoundUserName"
             );
 
-            window.location.href =
-                "login.html?v=20261006-3";
+            void SFLoader.navigate(
+                "login.html?v=20261006-3"
+            );
 
         } catch (error) {
 

@@ -5,8 +5,8 @@
 
     try {
 
-        const response =
-            await fetch(
+        const { response, data } =
+            await SFLoader.request(
                 "../backend/api/auth/me.php",
                 {
                     credentials:
@@ -15,17 +15,15 @@
             );
 
 
-        const data =
-            await response.json();
-
-
         if (
             !response.ok ||
             !data.authenticated
         ) {
 
-            window.location.href =
-                "login.html";
+            void SFLoader.navigate(
+                "login.html",
+                { replace: true }
+            );
 
             return;
         }
@@ -59,8 +57,10 @@
         );
 
 
-        window.location.href =
-            "login.html";
+        void SFLoader.navigate(
+            "login.html",
+            { replace: true }
+        );
 
     }
 

@@ -276,8 +276,8 @@ loginForm.addEventListener(
 
         try {
 
-            const response =
-                await fetch(
+            const { response, data } =
+                await SFLoader.request(
                     `${API_BASE}/login.php`,
                     {
                         method:
@@ -298,10 +298,6 @@ loginForm.addEventListener(
                             })
                     }
                 );
-
-
-            const data =
-                await response.json();
 
 
             if (
@@ -335,15 +331,17 @@ loginForm.addEventListener(
                 "moderator"
             ) {
 
-                window.location.href =
-                    "admin-dashboard.html?v=20261006-3";
+                void SFLoader.navigate(
+                    "admin-dashboard.html?v=20261006-3"
+                );
 
                 return;
             }
 
 
-            window.location.href =
-                "home.html?v=20261006-3";
+            void SFLoader.navigate(
+                "home.html?v=20261006-3"
+            );
 
 
         } catch (error) {
@@ -354,7 +352,9 @@ loginForm.addEventListener(
 
 
             showMessage(
-                "تعذر الاتصال بالسيرفر. تأكد أنك فاتح المشروع عن طريق localhost."
+                error instanceof SFLoader.ConnectionError
+                    ? error.message
+                    : "تعذر الاتصال بالسيرفر. تأكد أنك فاتح المشروع عن طريق localhost."
             );
 
         } finally {
@@ -463,8 +463,8 @@ registerForm.addEventListener(
 
         try {
 
-            const response =
-                await fetch(
+            const { response, data } =
+                await SFLoader.request(
                     `${API_BASE}/register.php`,
                     {
                         method:
@@ -488,10 +488,6 @@ registerForm.addEventListener(
                 );
 
 
-            const data =
-                await response.json();
-
-
             if (
                 !response.ok ||
                 !data.success
@@ -512,8 +508,9 @@ registerForm.addEventListener(
             );
 
 
-            window.location.href =
-                "home.html?v=20261006-3";
+            void SFLoader.navigate(
+                "home.html?v=20261006-3"
+            );
 
 
         } catch (error) {
@@ -524,7 +521,9 @@ registerForm.addEventListener(
 
 
             showMessage(
-                "تعذر الاتصال بالسيرفر. تأكد من تشغيل Apache و MySQL."
+                error instanceof SFLoader.ConnectionError
+                    ? error.message
+                    : "تعذر الاتصال بالسيرفر. تأكد من تشغيل Apache و MySQL."
             );
 
         } finally {
