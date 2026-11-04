@@ -250,11 +250,14 @@ loginForm.addEventListener(
         if (
             !validateIdentifier(
                 identifier
+            ) &&
+            !/^[A-Za-z0-9_.-]{3,80}$/.test(
+                identifier
             )
         ) {
 
             showMessage(
-                "أدخل رقم جوال سعودي أو بريد إلكتروني صحيح."
+                "أدخل رقم جوال سعودي أو بريد إلكتروني أو اسم مستخدم صحيح."
             );
 
             return;

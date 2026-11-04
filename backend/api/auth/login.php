@@ -53,6 +53,19 @@ $normalized =
 
 
 if (
+    !$normalized['type'] &&
+    preg_match('/^[A-Za-z0-9_.-]{3,80}$/', $identifier)
+) {
+
+    $normalized = [
+        'type' => 'username',
+        'value' => $identifier
+    ];
+
+}
+
+
+if (
     !$normalized['type']
 ) {
 
@@ -117,9 +130,15 @@ try {
 
     } else {
 
+        $column =
+            $normalized['type'] === 'username'
+                ? 'username'
+                : 'phone';
+
+
         $query =
             $pdo->prepare(
-                '
+                "
                 SELECT
                     id,
                     full_name,
@@ -131,10 +150,10 @@ try {
 
                 FROM users
 
-                WHERE phone = ?
+                WHERE {$column} = ?
 
                 LIMIT 1
-                '
+                "
             );
 
     }
